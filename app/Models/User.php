@@ -33,7 +33,7 @@ class User extends Authenticatable
         ];
     }
 
-      /**
+    /**
      * The roles that belong to the user.
      */
     public function roles(): BelongsToMany
@@ -42,14 +42,18 @@ class User extends Authenticatable
     }
 
 
-   /** Send an email when a user requests password reset */
+    /** Send an email when a user requests password reset */
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
     }
 
 
+    public function domains()
+    {
+        return $this->hasMany(Domain::class);
+    }
 
 
-
+    
 }

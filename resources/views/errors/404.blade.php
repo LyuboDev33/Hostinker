@@ -6,7 +6,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="error__content">
-                            <img src="assets/img/images/404.svg" alt="">
+                            <img src="/assets/img/images/404.svg" alt="">
                             <h2 class="title">Уупссс.....</h2>
                             <p>Страницата, която търсите не съществува.</p>
                             <a href="{{ route('welcome') }}" class="tg-btn tg-btn-two">
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="shape">
-                <img src="assets/img/images/breadcrumb_shape.png" alt="">
+                <img src="/assets/img/images/breadcrumb_shape.png" alt="">
             </div>
         </section>
         <!-- error-area-end -->

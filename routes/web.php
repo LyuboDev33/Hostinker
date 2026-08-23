@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -10,9 +11,11 @@ Route::get('/about',   [FrontEndController::class, 'about'])->name('about');
 Route::get('/pricing', [FrontEndController::class, 'pricing'])->name('pricing');
 
 Route::prefix('/domain')->group(function () {
-    Route::get('/',         [FrontEndController::class, 'domain'])->name('domain');
-    Route::get('/transfer', [FrontEndController::class, 'transfer'])->name('domain.transfer');
-    Route::get('/migrate',  [FrontEndController::class, 'migrate'])->name('domain.migrate');
+    Route::get('/', [DomainController::class, 'domain'])->name('domain');
+    Route::post('/check-availability', [DomainController::class, 'checkAvailability'])->name('domain.check.availability');
+
+    Route::get('/transfer', [DomainController::class, 'transfer'])->name('domain.transfer');
+    Route::get('/migrate',  [DomainController::class, 'migrate'])->name('domain.migrate');
 
 });
 

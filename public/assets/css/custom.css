@@ -1,0 +1,118 @@
+.domain-result {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+    padding: 15px 15px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    flex-direction: column;
+}
+
+.domain-result__icon {
+    flex: 0 0 auto;
+    font-size: 42px;
+    line-height: 1;
+}
+
+.domain-result--success .domain-result__icon {
+    color: #22a06b;
+}
+
+.domain-result--error .domain-result__icon {
+    color: #dc3545;
+}
+
+.domain-result__content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex: 1;
+    align-items: center;
+}
+
+.domain-result__header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.domain-result__status {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.domain-result--success .domain-result__status {
+    color: #22a06b;
+}
+
+.domain-result--error .domain-result__status {
+    color: #dc3545;
+}
+
+.domain-result__domain {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #161616;
+}
+
+.domain-result__prices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.domain-result__price {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #f7f8fa;
+}
+
+.domain-result__price span {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 12px;
+    color: #777;
+}
+
+.domain-result__price strong {
+    display: block;
+    font-size: 17px;
+    color: #161616;
+}
+
+.domain-result__message {
+    margin: 0;
+    font-size: 15px;
+    color: #555;
+}
+
+@media (max-width: 575px) {
+    .domain-result {
+        align-items: flex-start;
+        padding: 18px;
+    }
+
+    .domain-result__icon {
+        font-size: 32px;
+    }
+
+    .domain-result__domain {
+        font-size: 24px;
+    }
+
+    .domain-result__content {
+        flex-direction: column;
+    }
+
+    .domain-result__price {
+        width: 100%;
+    }
+}

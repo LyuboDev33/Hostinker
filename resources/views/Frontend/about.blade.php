@@ -31,7 +31,7 @@
 
 
 
-                        <img src="assets/img/shaps-1.png"
+                        <img src="/assets/img/shaps-1.png"
                             alt="shaps-1"
                             class="shaps-1">
 
@@ -71,7 +71,7 @@
                             <div class="col-md-6">
 
                                 <i>
-                                    <img src="assets/img/intelligent-icon-1.png"
+                                    <img src="/assets/img/intelligent-icon-1.png"
                                         alt="Фиксиран месечен абонамент">
                                 </i>
 
@@ -90,7 +90,7 @@
                             <div class="col-md-6">
 
                                 <i class="two">
-                                    <img src="assets/img/intelligent-icon-2.png"
+                                    <img src="/assets/img/intelligent-icon-2.png"
                                         alt="Lead generation реклама">
                                 </i>
 
@@ -230,7 +230,7 @@
 
             <div class="heading">
 
-                <img src="assets/img/heading-img.png"
+                <img src="/assets/img/heading-img.png"
                     alt="LASO">
 
                 <h6>
@@ -542,7 +542,7 @@
 
             <div class="heading">
 
-                <img src="assets/img/heading-img.png"
+                <img src="/assets/img/heading-img.png"
                     alt="Философията на LASO">
 
                 <h6>
@@ -637,7 +637,7 @@
 
             <div class="heading">
 
-                <img src="assets/img/heading-img.png"
+                <img src="/assets/img/heading-img.png"
                     alt="LASO клиенти">
 
                 <h6>
@@ -656,7 +656,7 @@
                 <div class="client-text">
 
                     <i class="quote">
-                        <img src="assets/img/quote.png"
+                        <img src="/assets/img/quote.png"
                             alt="quote">
                     </i>
 

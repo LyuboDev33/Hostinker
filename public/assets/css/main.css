@@ -222,6 +222,7 @@ hr {
   border-top: 0 none;
   margin: 15px 0;
   padding: 0;
+  width: 100%;
 }
 
 label {
@@ -291,6 +292,10 @@ textarea {
 
 .clear {
   clear: both;
+}
+
+.w-fit {
+    width: fit-content !important;
 }
 
 /*=============================
@@ -3765,10 +3770,14 @@ textarea {
   top: 6%;
 }
 
+.domain__search-wrap-two {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 .domain__search-form {
   position: relative;
   z-index: 1;
-  margin-bottom: 24px;
 }
 @media (max-width: 767.98px) {
   .domain__search-form {
@@ -3790,10 +3799,9 @@ textarea {
   font-weight: 400;
   font-size: 16px;
   color: var(--tg-body-color);
-  padding: 19px 20px 19px 64px;
-  height: 45px;
-  width: 350px;
-  margin: 30px auto;
+  padding: 19px 20px 20px 55px;
+  height: 55px;
+  margin: 5px auto;
   -webkit-transition: all 0.3s ease-out 0s;
   -moz-transition: all 0.3s ease-out 0s;
   -ms-transition: all 0.3s ease-out 0s;
@@ -3922,7 +3930,7 @@ textarea {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  right: 12px;
+  right: 6px;
 }
 @media (max-width: 767.98px) {
   .domain__search-action {
@@ -7606,9 +7614,7 @@ textarea {
     font-size: 38px;
   }
 }
-.domain__search-form-two {
-  margin-bottom: 40px;
-}
+
 @media (max-width: 767.98px) {
   .domain__search-form-two {
     box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.4);
