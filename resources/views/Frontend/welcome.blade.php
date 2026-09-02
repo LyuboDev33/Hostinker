@@ -1308,54 +1308,7 @@
         </section>
         <!-- faq-area-end -->
 
-        <!-- brand-area -->
-        <div class="brand__area">
-            <div class="container">
-                <div class="brand__title">Trusted By Top Brands Worldwide</div>
-                <div class="brand__item-wrap">
-                    <div class="swiper-container brand-active fix">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img01.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img02.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img03.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img04.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img05.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img06.png" alt="img">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="brand__item">
-                                    <img src="/assets/img/brand/brand_img03.png" alt="img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- brand-area-end -->
+     
 
         <!-- blog-post-area -->
         <section class="blog__post-area section-pt-120 section-pb-90">

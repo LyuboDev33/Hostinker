@@ -11,6 +11,8 @@ class Role extends Model
 {
 
     const SUPER_ADMIN = 'super_admin';
+    const ADMIN = 'admin';
+    const SUPPORT_AGENT  = 'support_agent';
     const CLIENT = 'client';
 
     /**
@@ -30,4 +32,6 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    
 }

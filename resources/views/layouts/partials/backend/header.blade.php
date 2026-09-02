@@ -75,14 +75,6 @@
                             </a>
                         </li>
 
-                        <li>
-                            <a
-                                <i class="fa-regular fa-envelope"></i>
-
-                                Съобщения
-                            </a>
-                        </li>
-
                         <li class="dashboard-dropdown__divider"></li>
 
                         <li>

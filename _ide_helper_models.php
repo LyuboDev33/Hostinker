@@ -11,11 +11,73 @@
  */
 
 
+namespace App\Models\Admin{
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string $content
+ * @property string $image
+ * @property int|null $author_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereUpdatedAt($value)
+ */
+	class Blog extends \Eloquent {}
+}
+
 namespace App\Models{
 /**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartDomainPrice> $prices
+ * @property-read int|null $prices_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomain newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomain newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomain query()
+ */
+	class CartDomain extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomainPrice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomainPrice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartDomainPrice query()
+ */
+	class CartDomainPrice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $domain_name
+ * @property string|null $registered_at
+ * @property string|null $expires_at
+ * @property int $auto_renew
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereAutoRenew($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereDomainName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereRegisteredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereUserId($value)
  */
 	class Domain extends \Eloquent {}
 }

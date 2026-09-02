@@ -6,11 +6,7 @@
             <x-logo width="150" />
         </a>
 
-        <button
-            type="button"
-            class="dashboard-sidebar__close"
-            data-sidebar-close
-            aria-label="Затвори">
+        <button type="button" class="dashboard-sidebar__close" data-sidebar-close aria-label="Затвори">
             <i class="fa-regular fa-circle-xmark"></i>
         </button>
 
@@ -21,10 +17,66 @@
 
         <ul class="dashboard-sidebar__menu">
 
+
+            @if ($isAdmin)
+                <li class="dashboard-sidebar__separator">
+                    <span>Администрация</span>
+                </li>
+
+
+                <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('admin.*') ? 'is-open' : '' }}">
+
+                    <button type="button"
+                        class="dashboard-sidebar__menu-toggle {{ request()->routeIs('admin.*') ? 'is-active' : '' }}"
+                        data-sidebar-submenu>
+
+                        <span class="dashboard-sidebar__menu-main">
+
+                            <span class="dashboard-sidebar__menu-icon">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </span>
+
+                            <span>Админ панел</span>
+
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down dashboard-sidebar__arrow"></i>
+
+                    </button>
+
+
+                    <ul class="dashboard-sidebar__submenu">
+
+                        <li>
+                            <a href="{{ route('super_admin.blog.index') }}"
+                                class="{{ request()->routeIs('admin.users.blog*') ? 'is-active' : '' }}">
+                                Блог
+                            </a>
+                        </li>
+
+                        <li>
+                            <a {{-- href="{{ route('admin.users.index') }}" --}}
+                                class="{{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}">
+                                Потребители
+                            </a>
+                        </li>
+
+
+
+                        <li>
+                            <a href="" class="{{ request()->routeIs('admin.domains.*') ? 'is-active' : '' }}">
+                                Домейни
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+            @endif
+
             {{-- Dashboard --}}
             <li>
-                <a href="{{ route('dashboard') }}"
-                    class="{{ request()->routeIs('dashboard') ? 'is-active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'is-active' : '' }}">
 
                     <span class="dashboard-sidebar__menu-icon">
                         <i class="fa-solid fa-house"></i>
@@ -37,10 +89,9 @@
 
 
             {{-- Websites --}}
-            <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('websites.*') ? 'is-open' : '' }}">
+            <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('backend.websites.*') ? 'is-open' : '' }}">
 
-                <button
-                    type="button"
+                <button type="button"
                     class="dashboard-sidebar__menu-toggle {{ request()->routeIs('websites.*') ? 'is-active' : '' }}"
                     data-sidebar-submenu>
 
@@ -62,15 +113,14 @@
                 <ul class="dashboard-sidebar__submenu">
 
                     <li>
-                        <a href="#"
-                            class="{{ request()->routeIs('websites.index', 'websites.show', 'websites.edit') ? 'is-active' : '' }}">
+                        <a href="{{ route('backend.websites.index') }}"
+                            class="{{ request()->routeIs('backend.websites.index', 'websites.show', 'websites.edit') ? 'is-active' : '' }}">
                             Моите сайтове
                         </a>
                     </li>
 
                     <li>
-                        <a href="#"
-                            class="{{ request()->routeIs('websites.create') ? 'is-active' : '' }}">
+                        <a href="#" class="{{ request()->routeIs('websites.create') ? 'is-active' : '' }}">
                             Добави сайт
                         </a>
                     </li>
@@ -81,11 +131,11 @@
 
 
             {{-- Domains --}}
-            <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('domains.*') ? 'is-open' : '' }}">
+            <li
+                class="dashboard-sidebar__item-has-children {{ request()->routeIs('backend.domain.*') ? 'is-open' : '' }}">
 
-                <button
-                    type="button"
-                    class="dashboard-sidebar__menu-toggle {{ request()->routeIs('domains.*') ? 'is-active' : '' }}"
+                <button type="button"
+                    class="dashboard-sidebar__menu-toggle {{ request()->routeIs('backend.domain.*') ? 'is-active' : '' }}"
                     data-sidebar-submenu>
 
                     <span class="dashboard-sidebar__menu-main">
@@ -102,19 +152,18 @@
 
                 </button>
 
-
                 <ul class="dashboard-sidebar__submenu">
 
                     <li>
-                        <a href="#"
-                            class="{{ request()->routeIs('domains.index', 'domains.show') ? 'is-active' : '' }}">
+                        <a href="{{ route('backend.domain.index') }}"
+                            class="{{ request()->routeIs('backend.domain.index', 'backend.domain.show') ? 'is-active' : '' }}">
                             Моите домейни
                         </a>
                     </li>
 
                     <li>
-                        <a href="#"
-                            class="{{ request()->routeIs('domains.create') ? 'is-active' : '' }}">
+                        <a
+                            class="{{ request()->routeIs('backend.domain.create') ? 'is-active' : '' }}">
                             Регистрирай домейн
                         </a>
                     </li>
@@ -127,8 +176,7 @@
             {{-- Hosting --}}
             <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('hosting.*') ? 'is-open' : '' }}">
 
-                <button
-                    type="button"
+                <button type="button"
                     class="dashboard-sidebar__menu-toggle {{ request()->routeIs('hosting.*') ? 'is-active' : '' }}"
                     data-sidebar-submenu>
 
@@ -157,8 +205,7 @@
                     </li>
 
                     <li>
-                        <a href="#"
-                            class="{{ request()->routeIs('hosting.plans') ? 'is-active' : '' }}">
+                        <a href="#" class="{{ request()->routeIs('hosting.plans') ? 'is-active' : '' }}">
                             Хостинг планове
                         </a>
                     </li>
@@ -170,8 +217,7 @@
 
             {{-- Messages --}}
             <li>
-                <a href="#"
-                    class="{{ request()->routeIs('messages.*') ? 'is-active' : '' }}">
+                <a href="#" class="{{ request()->routeIs('messages.*') ? 'is-active' : '' }}">
 
                     <span class="dashboard-sidebar__menu-icon">
                         <i class="fa-regular fa-envelope"></i>
@@ -187,70 +233,7 @@
             </li>
 
 
-            @if ($isAdmin)
 
-                <li class="dashboard-sidebar__separator">
-                    <span>Администрация</span>
-                </li>
-
-
-                <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('admin.*') ? 'is-open' : '' }}">
-
-                    <button
-                        type="button"
-                        class="dashboard-sidebar__menu-toggle {{ request()->routeIs('admin.*') ? 'is-active' : '' }}"
-                        data-sidebar-submenu>
-
-                        <span class="dashboard-sidebar__menu-main">
-
-                            <span class="dashboard-sidebar__menu-icon">
-                                <i class="fa-solid fa-user-shield"></i>
-                            </span>
-
-                            <span>Админ панел</span>
-
-                        </span>
-
-                        <i class="fa-solid fa-chevron-down dashboard-sidebar__arrow"></i>
-
-                    </button>
-
-
-                    <ul class="dashboard-sidebar__submenu">
-
-                        <li>
-                            <a href="{{ route('admin.users.index') }}"
-                                class="{{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}">
-                                Потребители
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#"
-                                class="{{ request()->routeIs('admin.hosting.*') ? 'is-active' : '' }}">
-                                Хостинг планове
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#"
-                                class="{{ request()->routeIs('admin.websites.*') ? 'is-active' : '' }}">
-                                Уебсайтове
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#"
-                                class="{{ request()->routeIs('admin.domains.*') ? 'is-active' : '' }}">
-                                Домейни
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </li>
-
-            @endif
 
         </ul>
 

@@ -28,6 +28,8 @@
 
     <script src="https://unpkg.com/lenis@1.3.23/dist/lenis.min.js"></script>
 
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+
 
 </head>
 
@@ -60,7 +62,6 @@
 
 
     <!-- JS here -->
-    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/wow.min.js"></script>
     <script src="/assets/js/aos.js"></script>

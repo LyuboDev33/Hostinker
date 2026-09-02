@@ -19,6 +19,11 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->string('domain_name')->unique();
+            $table->integer('price');
+            
+            $table->dateTime('registered_at')->nullable();
+            $table->dateTime('expires_at')->nullable();
+            $table->boolean('auto_renew')->default(false);
 
             $table->timestamps();
         });

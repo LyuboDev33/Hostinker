@@ -24,15 +24,20 @@
 
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.23/dist/lenis.css">
 
-      <!-- color -->
+    <!-- color -->
     <link rel="stylesheet" href="/assets/css/dashboard.css?v=<?= time() ?>">
 
     <link rel="stylesheet" href="/assets/css/main.css?v=<?= time() ?>">
+
+        <link rel="stylesheet" href="/assets/css/custom.css?v=<?= time() ?>">
 
 
     <!-- jQuery -->
     <script src="/assets/js/vendor/jquery-3.6.0.min.js?v=<?= time() ?>"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
 
 
     <script src="https://unpkg.com/lenis@1.3.23/dist/lenis.min.js"></script>
@@ -40,6 +45,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.umd.js"></script>
+
+    <script src="https://cdn.tiny.cloud/1/oy49mrh99x9qochiaeatx6s93oogkmooakygczsvo87c3905/tinymce/8/tinymce.min.js"
+        referrerpolicy="origin" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -70,9 +79,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeFancybox();
-            initializeLenis();
             initDashboardDropdown();
             initSidebarToggle();
+            initDashboardDropdowns();
         });
 
         function initializeFancybox() {
@@ -89,46 +98,15 @@
             Fancybox.bind('[data-fancybox]', {});
         }
 
-        function initializeLenis() {
-
-            const lenis = new Lenis({
-                duration: 1,
-                smoothWheel: true,
-                wheelMultiplier: 0.8,
-                touchMultiplier: 0.8,
-                lerp: 0.5
-            });
-
-            function lenisAnimationFrame(time) {
-                lenis.raf(time);
-                requestAnimationFrame(lenisAnimationFrame);
-            }
-
-            requestAnimationFrame(lenisAnimationFrame);
-        }
-
-
         function initDashboardDropdown() {
-            document.addEventListener('click', function(e) {
-                const trigger = e.target.closest('[data-dropdown-toggle]');
-                const openDropdown = document.querySelector('.dashboard-dropdown.is-open');
+            const submenuTriggers = document.querySelectorAll('[data-sidebar-submenu]');
 
-                if (trigger) {
-                    const dropdown = trigger.closest('.dashboard-dropdown');
+            submenuTriggers.forEach((trigger) => {
+                trigger.addEventListener('click', function() {
+                    const menuItem = this.closest('.dashboard-sidebar__item-has-children');
 
-                    if (openDropdown && openDropdown !== dropdown) {
-                        openDropdown.classList.remove('is-open');
-                    }
-
-                    dropdown.classList.toggle('is-open');
-                    e.stopPropagation();
-
-                    return;
-                }
-
-                if (openDropdown && !e.target.closest('.dashboard-dropdown')) {
-                    openDropdown.classList.remove('is-open');
-                }
+                    menuItem.classList.toggle('is-open');
+                });
             });
         }
 
@@ -150,6 +128,23 @@
                 }
             });
         }
+
+        function initDashboardDropdowns() {
+            const dropdowns = document.querySelectorAll('.dashboard-dropdown');
+
+            dropdowns.forEach((dropdown) => {
+                const toggle = dropdown.querySelector('[data-dropdown-toggle]');
+
+                if (!toggle) {
+                    return;
+                }
+
+                toggle.addEventListener('click', function() {
+                    dropdown.classList.toggle('is-open');
+                });
+            });
+        }
+
 
 
         function initTinyMce() {

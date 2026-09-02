@@ -29,7 +29,9 @@
     background: white;
     margin: 15px;
     border-radius: 10px;
+    position: relative;
 }
+
 
 
 /* ========================================
@@ -105,14 +107,14 @@
     padding: 0;
 }
 
-.dashboard-sidebar__menu > li {
+.dashboard-sidebar__menu>li {
     margin-bottom: 5px;
 }
 
 
 /* Main links + dropdown buttons */
 
-.dashboard-sidebar__menu > li > a,
+.dashboard-sidebar__menu>li>a,
 .dashboard-sidebar__menu-toggle {
     width: 100%;
     min-height: 46px;
@@ -143,7 +145,7 @@
         color 0.2s ease;
 }
 
-.dashboard-sidebar__menu > li > a:hover,
+.dashboard-sidebar__menu>li>a:hover,
 .dashboard-sidebar__menu-toggle:hover {
     background: #f3f1ff;
     color: var(--tg-theme-secondary);
@@ -152,10 +154,11 @@
 
 /* Active */
 
-.dashboard-sidebar__menu > li > a.is-active,
+.dashboard-sidebar__menu>li>a.is-active,
 .dashboard-sidebar__menu-toggle.is-active {
     background: var(--tg-theme-secondary);
     color: #fff;
+    margin-bottom: 15px;
 }
 
 
@@ -193,13 +196,13 @@
         color 0.2s ease;
 }
 
-.dashboard-sidebar__menu > li > a:hover .dashboard-sidebar__menu-icon,
+.dashboard-sidebar__menu>li>a:hover .dashboard-sidebar__menu-icon,
 .dashboard-sidebar__menu-toggle:hover .dashboard-sidebar__menu-icon {
     background: #eeebff;
     color: var(--tg-theme-secondary);
 }
 
-.dashboard-sidebar__menu > li > a.is-active .dashboard-sidebar__menu-icon,
+.dashboard-sidebar__menu>li>a.is-active .dashboard-sidebar__menu-icon,
 .dashboard-sidebar__menu-toggle.is-active .dashboard-sidebar__menu-icon {
     background: rgba(255, 255, 255, 0.16);
     color: #fff;
@@ -242,8 +245,7 @@
     padding-left: 43px;
 }
 
-.dashboard-sidebar__item-has-children.is-open
-.dashboard-sidebar__submenu {
+.dashboard-sidebar__item-has-children.is-open .dashboard-sidebar__submenu {
     display: block;
 }
 
@@ -571,6 +573,15 @@
 /* ========================================
    RESPONSIVE
 ======================================== */
+
+@media (min-width: 992px) {
+    .add-new-website {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+}
 
 @media (max-width: 991.98px) {
 

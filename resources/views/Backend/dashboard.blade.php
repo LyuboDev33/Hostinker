@@ -38,7 +38,7 @@
 
                 <div class="col-xl-5 col-lg-4 text-lg-end">
 
-                    <a href="#" class="tg-btn tg-btn-two">
+                    <a href="#" class="tg-btn tg-btn-two add-new-website">
                         <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.66797 7.5L12.168 10L9.66797 12.5"

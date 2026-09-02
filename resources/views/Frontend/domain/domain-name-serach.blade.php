@@ -10,7 +10,7 @@
                         d="M69.7142 0.0317909C69.4741 0.0498856 68.6882 0.107126 67.9677 0.158902C53.4981 1.19988 34.1707 5.85317 21.0452 11.4561C9.81998 16.2478 -0.151768 22.0278 0.00174959 23.6538C0.036767 24.0241 0.388425 24.03 1.50042 23.679C2.49951 23.3636 2.43332 23.3196 1.31241 23.5539C0.196222 23.7872 0.154568 23.7417 0.85841 23.0576C3.79498 20.2033 18.3601 13.2228 28.3442 9.8847C44.6053 4.44797 60.6901 1.44434 73.7749 1.40098C78.7808 1.38441 80.0623 1.60549 80.0623 2.48568C80.0623 3.6793 75.0054 7.01195 71.7227 7.98181C61.7857 10.9175 48.8795 15.9927 47.4536 17.5254C46.9788 18.0358 47.2131 18.7167 47.8636 18.7167C49.1436 18.7167 59.1241 14.9004 67.2255 11.3132C70.0471 10.0639 70.4362 9.94553 78.5777 7.86168C90.9303 4.70004 97.3086 3.65879 105.299 3.49943C108.587 3.43395 108.916 3.50606 108.442 4.18855C107.487 5.56411 100.384 9.0906 88.1399 14.2674C85.9769 15.1819 85.4413 15.8101 86.1793 16.5671L86.4457 16.8403L87.38 16.7934C88.0872 16.7579 88.8848 16.6139 90.6589 16.2015C96.6864 14.8001 108.106 12.4839 113.639 11.5406C123.048 9.93639 133.353 8.81649 147.914 7.81564C150.085 7.66649 151.792 7.49818 152.979 7.31651C153.963 7.16584 155.496 6.97191 156.384 6.88565L158 6.7287L156.908 6.6634C156.308 6.62748 155.031 6.48917 154.07 6.35606C149.741 5.75616 142.692 6.14072 127.262 7.8186C117.316 8.90007 105.433 10.9882 94.6183 13.5546C93.9069 13.7235 93.2585 13.8603 93.1775 13.8586C93.0964 13.8569 93.9732 13.4408 95.1259 12.9338C108.252 7.16037 111.235 5.14542 109.991 2.89146C109.489 1.98368 108.637 1.7721 105.474 1.77058C97.8514 1.76682 89.901 3.033 79.0626 5.97688C77.4871 6.40479 77.4915 6.40694 78.5001 5.69838C82.2859 3.03846 82.1052 0.939927 78.0256 0.187026C77.3427 0.0610802 70.9178 -0.0590409 69.7142 0.0317909Z" />
                 </svg>
                 <div class="section__title text-center mb-40">
-                    <h2 class="title">Flat 25% OFF on new domain registration!</h2>
+                    <h2 class="title">25% отстъпка при регистрация на нов домейн!</h2>
                 </div>
                 <div class="domain__search-wrap domain__search-wrap-two">
                     <form method="POST" action="{{ route('domain.check.availability') }}"
@@ -29,7 +29,7 @@
 
                         <div class="domain__search-action">
 
-                            <button type="submit" class="tg-btn tg-btn-two">Потърси домайн</button>
+                            <button type="submit" class="tg-btn tg-btn-two">Потърси домейн</button>
                         </div>
                     </form>
                     @error('domainName')
@@ -39,7 +39,8 @@
                     @enderror
 
                     @if (session('domainAvailable'))
-                        <div class="domain-result domain-result--success">
+                        <form action="{{ route('domain.add.to.cart', session('domainAvailable.domainName')) }}"
+                            method="POST" class="domain-result domain-result--success">
                             <div class="domain-result__content">
 
                                 <div class="domain-result__header">
@@ -52,6 +53,7 @@
                                     <h3 class="domain-result__domain">
                                         {{ session('domainAvailable.domainName') }}
                                     </h3>
+                                    <button class="tg-btn tg-btn-two mt-3">Добави в количката</button>
                                 </div>
 
                                 <div class="domain-result__prices">
@@ -65,7 +67,7 @@
                                     </div>
 
                                     <div class="domain-result__price">
-                                        <span>Цена за подновяване</span>
+                                        <span>Цена за подновяване / година</span>
 
                                         <strong>
                                             {{ number_format(session('domainAvailable.renewalPrice'), 2) }} €
@@ -75,18 +77,18 @@
                                 </div>
 
                             </div>
-                               <hr>
+                            <hr>
                             <p>
                                 <i class="fa-solid fa-circle-info"></i>
-                                При закупуване, домейнът ще бъде активен 1г.
+                                След като добавите продукта в количката, ще можете да изберете периода за който искате
+                                да притежавате домейна.
                             </p>
-                        </div>
-
+                        </form>
                     @endif
 
 
                     @if (session('domainUnavailable'))
-                        <div class="domain-result domain-result--error">
+                        <div class="domain-result domain-result--error w-fit">
 
                             <div class="domain-result__content">
 
@@ -105,12 +107,12 @@
 
 
                     @if (session('error'))
-                        <div class="domain-result domain-result--error">
+                        <div class="domain-result domain-result--error w-fit">
                             <div class="domain-result__content">
 
                                 <span class="domain-result__status">
                                     <i class="fa-regular fa-circle-xmark"></i>
-                                    Възникна грешка
+                                    Внимание!
                                 </span>
 
                                 <p class="domain-result__message">
@@ -152,157 +154,302 @@
     </section>
     <!-- domain__search-area-end -->
 
-    <!-- domain-price-area -->
-    <section class="domain__price-area section-pt-120 section-pb-90">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section__title text-center mb-60">
-                        <h2 class="title">Seamless website migration with ease.</h2>
-                        <p>Switch to a better host today! Migrate your website effortlessly with our expert support. Get
-                            started now!</p>
-                    </div>
-                </div>
-            </div>
-            <div class="domain__price-item-wrap">
-                <div class="row gutter-30">
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.com</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.net</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.org</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.ai</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.online</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.tech</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.agency</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.me</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.art</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.business</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.studio</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-6">
-                        <div class="domain__price-item">
-                            <h3 class="name">.edu</h3>
-                            <span class="intro-price">Intro Price</span>
-                            <h2 class="price">$6.99 <span>Save 70%</span></h2>
-                            <div class="domain__price-btn">
-                                <a href="login.html" class="tg-btn tg-btn-two">Register</a>
-                                <a href="#!" class="transfer">Transfer</a>
-                            </div>
-                        </div>
-                    </div>
+  <!-- domain-price-area -->
+<section class="domain__price-area section-pt-120 section-pb-90">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section__title text-center mb-60">
+
+                    <h2 class="title">
+                        Изберете подходящ домейн за вашия проект
+                    </h2>
+
+                    <p>
+                        Разгледайте актуалните цени за регистрация на най-популярните домейн разширения.
+                    </p>
+
                 </div>
             </div>
         </div>
-    </section>
-    <!-- domain-price-area-end -->
+
+
+        <div class="domain__price-item-wrap">
+
+            <div class="row gutter-30">
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .com
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            17.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .net
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            19.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .org
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            17.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .eu
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            10.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .tech
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            13.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .agency
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            5.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .me
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            26.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .art
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            39.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .business
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            3.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-4 col-6">
+                    <div class="domain__price-item">
+
+                        <h3 class="name">
+                            .studio
+                        </h3>
+
+                        <span class="intro-price">
+                            Цена за регистрация
+                        </span>
+
+                        <h2 class="price">
+                            21.99 €
+                        </h2>
+
+                        <div class="domain__price-btn">
+
+                            <a href="{{ route('domain') }}" class="tg-btn tg-btn-two">
+                                Регистрирай
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<!-- domain-price-area-end -->
 
     <!-- features-area -->
     <section class="features__area-seven">
@@ -310,9 +457,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section__title white-title text-center mb-60">
-                        <h2 class="title">Maximize Your Domain’s Potential with Key Features</h2>
-                        <p>Experience ultra-fast loading speeds globally for seamless performance and reliability
-                            anywhere in the world.</p>
+                        <h2 class="title">Извлечете максимума от вашия домейн с ключови функционалности</h2>
+                        <p>Възползвайте се от висока скорост, надеждност и безпроблемна работа на вашия домейн навсякъде по света.</p>
                     </div>
                 </div>
             </div>
@@ -347,9 +493,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Free WHOIS Protection</h4>
-                                <p>Hide your personal contact information from public databases for added privacy and
-                                    security.</p>
+                                <h4 class="title">Безплатна WHOIS защита</h4>
+                                <p>Скрийте личните си данни за контакт от публичните бази данни за повече поверителност и сигурност.</p>
                             </div>
                         </div>
                     </div>
@@ -368,8 +513,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Auto-Renewal</h4>
-                                <p>Automatically renew your domain to avoid expiration and potential loss of ownership.
+                                <h4 class="title">Автоматично подновяване</h4>
+                                <p>Подновявайте домейна си автоматично, за да избегнете изтичане на срока и евентуална загуба на собствеността.
                                 </p>
                             </div>
                         </div>
@@ -395,9 +540,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Email Forwarding</h4>
-                                <p>Create professional email aliases (e.g., info@yourdomain.com) and forward them to
-                                    your inbox.</p>
+                                <h4 class="title">Пренасочване на имейли</h4>
+                                <p>Създавайте професионални имейл адреси (например info@yourdomain.com) и ги пренасочвайте към вашата пощенска кутия.</p>
                             </div>
                         </div>
                     </div>
@@ -425,9 +569,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">DNS Management</h4>
-                                <p>Full control over DNS records to connect your domain with websites, emails, and other
-                                    services.</p>
+                                <h4 class="title">Управление на DNS</h4>
+                                <p>Пълен контрол върху DNS записите за свързване на домейна с уебсайтове, имейли и други услуги.</p>
                             </div>
                         </div>
                     </div>
@@ -447,8 +590,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Bulk Domain Registration</h4>
-                                <p>Register and manage multiple domain names at once—ideal for businesses or resellers.
+                                <h4 class="title">Регистрация на множество домейни</h4>
+                                <p>Регистрирайте и управлявайте няколко домейна едновременно — идеално за бизнеси и реселъри.
                                 </p>
                             </div>
                         </div>
@@ -468,9 +611,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Domain Name Search Tool</h4>
-                                <p>Easily check availability and find the perfect domain with smart suggestions and
-                                    extensions.</p>
+                                <h4 class="title">Инструмент за търсене на домейни</h4>
+                                <p>Проверявайте лесно дали даден домейн е свободен и открийте подходящото име с предложения за различни разширения.</p>
                             </div>
                         </div>
                     </div>
@@ -488,9 +630,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Domain Locking</h4>
-                                <p>Prevent unauthorized transfers or changes to your domain by locking it from external
-                                    access.</p>
+                                <h4 class="title">Заключване на домейна</h4>
+                                <p>Предотвратете неоторизирани трансфери или промени по домейна чрез заключване срещу външен достъп.</p>
                             </div>
                         </div>
                     </div>
@@ -510,9 +651,8 @@
                                 </svg>
                             </div>
                             <div class="features__content-nine">
-                                <h4 class="title">Wide Range of TLDs</h4>
-                                <p>Choose from popular (.com, .net, .org) and niche or country-specific extensions
-                                    (.tech, .store, .in, etc.)</p>
+                                <h4 class="title">Богат избор от домейн разширения</h4>
+                                <p>Изберете между популярни (.com, .net, .org), специализирани или национални разширения (.tech, .store, .in и други).</p>
                             </div>
                         </div>
                     </div>
@@ -539,14 +679,13 @@
                     <div class="col-lg-6">
                         <div class="domain__transfer-content">
                             <div class="section__title mb-15">
-                                <h2 class="title">Already Own a Domain? Move It to xHosting Quickly</h2>
+                                <h2 class="title">Вече имате домейн? Прехвърлете го бързо към Hostinker</h2>
                             </div>
-                            <p>Switch to a better host today! Migrate your website effortlessly with our expert support.
-                                Get started now!</p>
+                            <p>Преминете към по-добър хостинг още днес! Прехвърлете сайта си лесно с помощта на нашия екип. Започнете сега!</p>
                             <a href="domain-2.html" class="tg-link-btn">
                                 <span class="link-effect">
-                                    <span class="effect-1">Transfer Domain</span>
-                                    <span class="effect-1">Transfer Domain</span>
+                                    <span class="effect-1">Прехвърли домейн</span>
+                                    <span class="effect-1">Прехвърли домейн</span>
                                 </span>
                                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -579,7 +718,7 @@
                     <div class="col-lg-7">
                         <div class="support__content support__content-two">
                             <div class="section__title mb-40">
-                                <h2 class="title">Award-Winning Supports by an Outstanding Team</h2>
+                                <h2 class="title">Професионална поддръжка от отличен екип</h2>
                             </div>
                             <div class="support__list-wrap">
                                 <div class="support__list-item support__list-item-two">
@@ -592,8 +731,8 @@
                                         </svg>
                                     </div>
                                     <div class="content">
-                                        <h5 class="title">24/7 Expert Support</h5>
-                                        <p>Get round-the-clock assistance whenever you need it.</p>
+                                        <h5 class="title">Експертна поддръжка 24/7</h5>
+                                        <p>Получавайте помощ по всяко време, когато имате нужда.</p>
                                     </div>
                                 </div>
                                 <div class="support__list-item support__list-item-two">
@@ -609,8 +748,8 @@
                                         </svg>
                                     </div>
                                     <div class="content">
-                                        <h5 class="title">Instant AI Assistant Support</h5>
-                                        <p>Get round-the-clock assistance whenever you need it.</p>
+                                        <h5 class="title">Незабавна помощ с AI асистент</h5>
+                                        <p>Получавайте помощ по всяко време, когато имате нужда.</p>
                                     </div>
                                 </div>
                                 <div class="support__list-item support__list-item-two">
@@ -635,15 +774,15 @@
                                         </svg>
                                     </div>
                                     <div class="content">
-                                        <h5 class="title">99% Customer Satisfactions</h5>
-                                        <p>Get round-the-clock assistance whenever you need it.</p>
+                                        <h5 class="title">99% удовлетвореност на клиентите</h5>
+                                        <p>Получавайте помощ по всяко време, когато имате нужда.</p>
                                     </div>
                                 </div>
                             </div>
                             <a href="contact.html" class="tg-link-btn">
                                 <span class="link-effect">
-                                    <span class="effect-1">Explore Our Support</span>
-                                    <span class="effect-1">Explore Our Support</span>
+                                    <span class="effect-1">Разгледайте нашата поддръжка</span>
+                                    <span class="effect-1">Разгледайте нашата поддръжка</span>
                                 </span>
                                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -673,9 +812,8 @@
                 <div class="col-lg-10">
                     <div class="faq__inner-wrap-two">
                         <div class="section__title text-center mb-60">
-                            <h2 class="title">Help Center – Hosting FAQs</h2>
-                            <p>Switch to a better host today! Migrate your website effortlessly with our expert support.
-                                Get started now!</p>
+                            <h2 class="title">Помощен център – Често задавани въпроси за домейни</h2>
+                            <p>Преминете към по-добър хостинг още днес! Прехвърлете сайта си лесно с помощта на нашия екип. Започнете сега!</p>
                         </div>
                         <div class="faq__wrap faq__wrap-two">
                             <div class="accordion" id="accordionExample">
@@ -684,15 +822,13 @@
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseOne" aria-expanded="true"
                                             aria-controls="collapseOne">
-                                            <span>1.</span> What is domain hosting
+                                            <span>1.</span> Какво представлява домейнът?
                                         </button>
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <p>I'm here to help if you're searching for a product designer to bring your
-                                                idea to life or a design partner to help take your business to the next
-                                                level.</p>
+                                            <p>Тук сме, за да ви помогнем с въпросите относно домейните, регистрацията, управлението и услугите, свързани с тях.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -701,15 +837,13 @@
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                             aria-expanded="false" aria-controls="collapseTwo">
-                                            <span>2.</span> Can I transfer my existing domain to your hosting service?
+                                            <span>2.</span> Мога ли да прехвърля съществуващия си домейн към вашата услуга?
                                         </button>
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <p>I'm here to help if you're searching for a product designer to bring your
-                                                idea to life or a design partner to help take your business to the next
-                                                level.</p>
+                                            <p>Тук сме, за да ви помогнем с въпросите относно домейните, регистрацията, управлението и услугите, свързани с тях.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -718,15 +852,13 @@
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseThree"
                                             aria-expanded="false" aria-controls="collapseThree">
-                                            <span>3.</span> Do you offer email hosting with domain hosting?
+                                            <span>3.</span> Предлагате ли имейл услуги заедно с домейна?
                                         </button>
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <p>I'm here to help if you're searching for a product designer to bring your
-                                                idea to life or a design partner to help take your business to the next
-                                                level.</p>
+                                            <p>Тук сме, за да ви помогнем с въпросите относно домейните, регистрацията, управлението и услугите, свързани с тях.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -735,15 +867,13 @@
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseFour"
                                             aria-expanded="false" aria-controls="collapseFour">
-                                            <span>4.</span> Is technical support available if I need help?
+                                            <span>4.</span> Предлагате ли техническа поддръжка при нужда?
                                         </button>
                                     </h2>
                                     <div id="collapseFour" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <p>I'm here to help if you're searching for a product designer to bring your
-                                                idea to life or a design partner to help take your business to the next
-                                                level.</p>
+                                            <p>Тук сме, за да ви помогнем с въпросите относно домейните, регистрацията, управлението и услугите, свързани с тях.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -752,26 +882,24 @@
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseFive"
                                             aria-expanded="false" aria-controls="collapseFive">
-                                            <span>5.</span> How secure is my domain with your service?
+                                            <span>5.</span> Колко сигурен е домейнът ми при използване на вашата услуга?
                                         </button>
                                     </h2>
                                     <div id="collapseFive" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <p>I'm here to help if you're searching for a product designer to bring your
-                                                idea to life or a design partner to help take your business to the next
-                                                level.</p>
+                                            <p>Тук сме, за да ви помогнем с въпросите относно домейните, регистрацията, управлението и услугите, свързани с тях.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="faq__bottom-content">
-                            <p>Didn’t find your Desiree answer? please feel free to
+                            <p>Не открихте отговора, който търсите? Не се колебайте да
                                 <a href="contact.html" class="tg-link-btn">
                                     <span class="link-effect">
-                                        <span class="effect-1">Contact us</span>
-                                        <span class="effect-1">Contact us</span>
+                                        <span class="effect-1">Свържете се с нас</span>
+                                        <span class="effect-1">Свържете се с нас</span>
                                     </span>
                                     <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -797,9 +925,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section__title text-center mb-50">
-                            <h2 class="title">The Right Hosting Plan for Every Need</h2>
-                            <p>Switch to a better host today! Migrate your website effortlessly with our expert support.
-                                Get started now!</p>
+                            <h2 class="title">Подходящ хостинг план за всяка нужда</h2>
+                            <p>Преминете към по-добър хостинг още днес! Прехвърлете сайта си лесно с помощта на нашия екип. Започнете сега!</p>
                         </div>
                     </div>
                 </div>
@@ -807,10 +934,9 @@
                     <div class="col-md-6">
                         <div class="features__item-five">
                             <div class="features__content-five">
-                                <h3 class="title">Effortless Managed WordPress Hosting</h3>
-                                <p>Get fast, secure, and hassle-free WordPress hosting with automatic updates, daily
-                                    backups, and expert support.</p>
-                                <a href="hosting.html" class="tg-btn tg-border-btn-three">See Pricing
+                                <h3 class="title">Лесен и напълно управляван WordPress хостинг</h3>
+                                <p>Получете бърз, сигурен и лесен WordPress хостинг с автоматични актуализации, ежедневни резервни копия и експертна поддръжка.</p>
+                                <a href="hosting.html" class="tg-btn tg-border-btn-three">Вижте цените
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.25 6.75L10.5 9L8.25 11.25" stroke="currentColor"
@@ -830,10 +956,9 @@
                     <div class="col-md-6">
                         <div class="features__item-five features__item-six">
                             <div class="features__content-five">
-                                <h3 class="title">Powerful & Scalable Cloud Hosting</h3>
-                                <p>Get fast, secure, and hassle-free WordPress hosting with automatic updates, daily
-                                    backups, and expert support.</p>
-                                <a href="hosting.html" class="tg-btn tg-border-btn-three">See Pricing
+                                <h3 class="title">Мощен и мащабируем Cloud хостинг</h3>
+                                <p>Получете бърз, сигурен и лесен WordPress хостинг с автоматични актуализации, ежедневни резервни копия и експертна поддръжка.</p>
+                                <a href="hosting.html" class="tg-btn tg-border-btn-three">Вижте цените
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.25 6.75L10.5 9L8.25 11.25" stroke="currentColor"
@@ -856,54 +981,20 @@
     </section>
     <!-- features-area-end -->
 
-    <!-- brand-area -->
-    <div class="brand__area-two section-pt-120">
-        <div class="container">
-            <div class="brand__title">Trusted By Top Brands Worldwide</div>
-            <div class="brand__item-wrap">
-                <div class="swiper-container brand-active fix">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img01.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img02.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img03.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img04.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img05.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img06.png" alt="img">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="brand__item">
-                                <img src="/assets/img/brand/brand_img03.png" alt="img">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- brand-area-end -->
+
+   @if (session('successDomainAdd'))
+
+      <x-modal
+            title="Домейнът е добавен в количката!"
+            :message="session('successDomainAdd')"
+            :primary-url="route('domain.cart')"
+            primary-text="Към количката"
+            :secondary-url="route('domain')"
+            secondary-text="Затвори"
+        />
+
+    @endif
+
 
 
 </x-frontend>
