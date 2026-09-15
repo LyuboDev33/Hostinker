@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Domain extends Model
 {
 
+    public const STATUSES = [
+        'active' => 'Активен',
+        'expired' => 'Изтекъл',
+        'pending' => 'В процес',
+        'neutral' => 'Очаква информация',
+    ];
+
     protected $fillable = [
         'user_id',
         'domain_name',

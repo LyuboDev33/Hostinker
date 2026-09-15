@@ -20,7 +20,8 @@
                     </h2>
 
                     <p>
-                        Управлявайте DNS записите за домейна, добавяйте нови записи и редактирайте съществуващите настройки.
+                        Управлявайте DNS записите за домейна, добавяйте нови записи и редактирайте съществуващите
+                        настройки.
                     </p>
                 </div>
 
@@ -74,11 +75,23 @@
                     </div>
 
 
-                    <form
-                        method="POST"
-                        action="#"
-                        class="backend-dns-records__form"
-                    >
+
+                    @if (session('success'))
+                        <div class="alert alert-success mb-4">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @error('dns_record')
+                        <div class="alert alert-danger mb-4">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+
+                    <form method="POST"
+                        action="{{ route('backend.create.dns-record', $domainName) }}"
+                        class="backend-dns-records__form">
 
                         @csrf
 
@@ -93,22 +106,47 @@
                                     Тип
                                 </label>
 
-                                <select
-                                    name="type"
-                                    id="type"
-                                    class="backend-dns-records__input"
-                                >
+                                <select name="type" id="type" class="backend-dns-records__input">
 
-                                    <option value="A">A</option>
-                                    <option value="AAAA">AAAA</option>
-                                    <option value="CNAME">CNAME</option>
-                                    <option value="MX">MX</option>
-                                    <option value="TXT">TXT</option>
-                                    <option value="SRV">SRV</option>
-                                    <option value="NS">NS</option>
-                                    <option value="ANAME">ANAME</option>
+                                    <option value="A" @selected(old('type') === 'A')>
+                                        A
+                                    </option>
+
+                                    <option value="AAAA" @selected(old('type') === 'AAAA')>
+                                        AAAA
+                                    </option>
+
+                                    <option value="CNAME" @selected(old('type') === 'CNAME')>
+                                        CNAME
+                                    </option>
+
+                                    <option value="MX" @selected(old('type') === 'MX')>
+                                        MX
+                                    </option>
+
+                                    <option value="TXT" @selected(old('type') === 'TXT')>
+                                        TXT
+                                    </option>
+
+                                    <option value="SRV" @selected(old('type') === 'SRV')>
+                                        SRV
+                                    </option>
+
+                                    <option value="NS" @selected(old('type') === 'NS')>
+                                        NS
+                                    </option>
+
+                                    <option value="ANAME" @selected(old('type') === 'ANAME')>
+                                        ANAME
+                                    </option>
 
                                 </select>
+
+                                @error('type')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                             </div>
 
@@ -117,18 +155,13 @@
                             <div class="backend-dns-records__form-group">
 
                                 <label for="host">
-                                    Host
+                                    Име / Name
                                 </label>
 
                                 <div class="backend-dns-records__host-field">
 
-                                    <input
-                                        type="text"
-                                        name="host"
-                                        id="host"
-                                        class="backend-dns-records__input"
-                                        placeholder="@"
-                                    >
+                                    <input type="text" name="host" id="host"
+                                        class="backend-dns-records__input" value="{{ old('host') }}" placeholder="@">
 
                                     <span class="backend-dns-records__domain-suffix">
                                         .{{ $domainName ?? 'domain.com' }}
@@ -136,7 +169,11 @@
 
                                 </div>
 
-
+                                @error('host')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                             </div>
 
@@ -148,13 +185,14 @@
                                     Стойност / Answer
                                 </label>
 
-                                <input
-                                    type="text"
-                                    name="answer"
-                                    id="answer"
-                                    class="backend-dns-records__input"
-                                    placeholder="Например: 192.168.1.1"
-                                >
+                                <input type="text" name="answer" id="answer" class="backend-dns-records__input"
+                                    value="{{ old('answer') }}" placeholder="Например: 192.168.1.1">
+
+                                @error('answer')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                             </div>
 
@@ -166,47 +204,52 @@
                                     TTL
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="ttl"
-                                    id="ttl"
-                                    value="300"
-                                    min="1"
-                                    class="backend-dns-records__input"
-                                >
+                                <input type="number" name="ttl" id="ttl" value="{{ old('ttl', 300) }}"
+                                    min="300" class="backend-dns-records__input">
+
+                                @error('ttl')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                             </div>
 
 
                             {{-- Priority --}}
-                            <div class="backend-dns-records__form-group">
+                            <div class="backend-dns-records__form-group" id="dns-priority-group" style="display: none;">
 
                                 <label for="priority">
                                     Приоритет
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="priority"
-                                    id="priority"
-                                    class="backend-dns-records__input"
-                                    placeholder="0"
-                                >
+                                <input type="number" name="priority" id="priority" class="backend-dns-records__input"
+                                    value="{{ old('priority') }}" min="0" placeholder="Например: 10">
 
+                                <small class="text-muted">
+                                    Задължително за MX и SRV записи.
+                                </small>
 
+                                @error('priority')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                             </div>
 
 
                             {{-- Submit --}}
-                            <div class="backend-dns-records__form-group backend-dns-records__form-group--button">
+                            <div
+                                class="backend-dns-records__form-group
+                                        backend-dns-records__form-group--button">
 
-                                <button
-                                    type="submit"
-                                    class="tg-btn tg-btn-two backend-dns-records__submit"
-                                >
+                                <button type="submit" class="tg-btn tg-btn-two backend-dns-records__submit">
+
                                     <i class="fa-solid fa-plus"></i>
-                                    Добави запис
+
+                                    Добави
+
                                 </button>
 
                             </div>
@@ -260,7 +303,6 @@
                                 <tbody>
 
                                     @foreach ($dnsRecords['records'] as $record)
-
                                         <tr>
 
                                             {{-- Type --}}
@@ -313,17 +355,13 @@
                                             <td>
 
                                                 @if (isset($record['priority']))
-
                                                     <span>
                                                         {{ $record['priority'] }}
                                                     </span>
-
                                                 @else
-
                                                     <span class="backend-domain-table__muted">
                                                         N/A
                                                     </span>
-
                                                 @endif
 
                                             </td>
@@ -334,17 +372,13 @@
 
                                                 <div class="backend-domain-table__actions">
 
-                                                    <button
-                                                        type="button"
-                                                        class="backend-domain-table__action backend-domain-table__action--primary"
-                                                    >
+                                                    <button type="button"
+                                                        class="backend-domain-table__action backend-domain-table__action--primary">
                                                         Редактирай
                                                     </button>
 
-                                                    <button
-                                                        type="button"
-                                                        class="backend-domain-table__action backend-domain-table__action--danger"
-                                                    >
+                                                    <button type="button"
+                                                        class="backend-domain-table__action backend-domain-table__action--danger">
                                                         Изтрий
                                                     </button>
 
@@ -353,7 +387,6 @@
                                             </td>
 
                                         </tr>
-
                                     @endforeach
 
                                 </tbody>
@@ -361,9 +394,7 @@
                             </table>
 
                         </div>
-
                     @else
-
                         <div class="backend-domains__empty">
 
                             <div class="backend-domains__empty-icon">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Domain;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,9 +19,11 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->string('status')->default(Domain::STATUSES['active']);
+
             $table->string('domain_name')->unique();
             $table->integer('price');
-            
+
             $table->dateTime('registered_at')->nullable();
             $table->dateTime('expires_at')->nullable();
             $table->boolean('auto_renew')->default(false);

@@ -23,9 +23,7 @@ class DomainService
         $this->token = env('NAME_COM_API');
         $this->link = env('NAME_COM_API_URL');
 
-        $this->credentials = base64_encode(
-            $this->username . ':' . $this->token
-        );
+        $this->credentials = base64_encode($this->username . ':' . $this->token);
 
         $this->client = new Client([
             'base_uri' => rtrim($this->link, '/'),
@@ -38,20 +36,43 @@ class DomainService
     }
 
     /**
+     * Get the domain
+     *
      * @param string $domainName
      * @return array
      */
-    public function dnsRecords(string $domainName)
+    public function retrieveDomainData(string $domainName)
     {
-        $domainNaming = strtolower(trim($domainName));
-
         $response = $this->client->get(
-            "/core/v1/domains/{$domainNaming}/records?perPage=500",
+            "/core/v1/domains/{$domainName}",
         );
 
-            $data = json_decode((string) $response->getBody(), true);
+        $data = json_decode((string) $response->getBody(), true);
 
         return $data;
+    }
+
+
+   
+    /**
+     * Update domain nameservers.
+     *
+     * @param string $domainName
+     * @param array $nameservers
+     * @return array
+     */
+    public function updateNameservers(string $domainName, array $nameservers): array
+    {
+        $response = $this->client->post(
+            "/core/v1/domains/{$domainName}:setNameservers",
+            [
+                'json' => [
+                    'nameservers' => array_values(array_filter($nameservers)),
+                ],
+            ]
+        );
+
+        return json_decode((string) $response->getBody(), true);
     }
 
 
@@ -269,8 +290,6 @@ class DomainService
             ]
         );
 
-        $statusCode = $response->getStatusCode();
-
         $data = json_decode((string) $response->getBody(), true);
 
         return $data;
@@ -310,10 +329,7 @@ class DomainService
         foreach ($responses as $year => $response) {
             $statusCode = $response->getStatusCode();
 
-            $data = json_decode(
-                (string) $response->getBody(),
-                true
-            );
+            $data = json_decode((string) $response->getBody(), true);
 
             if (
                 $statusCode < 200 ||

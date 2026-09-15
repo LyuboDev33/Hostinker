@@ -267,9 +267,9 @@
 
                                     </svg>
 
-                                    <span class="text">
+                                    <a href="{{ route('backend.domain.index') }}" class="text">
                                         Моите домейни
-                                    </span>
+                                    </a>
 
                                     <svg class="right-icon"
                                         width="20"

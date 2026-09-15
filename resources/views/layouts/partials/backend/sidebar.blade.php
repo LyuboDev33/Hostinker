@@ -114,7 +114,7 @@
 
                     <li>
                         <a href="{{ route('backend.websites.index') }}"
-                            class="{{ request()->routeIs('backend.websites.index', 'websites.show', 'websites.edit') ? 'is-active' : '' }}">
+                            class="{{ request()->routeIs('backend.websites.index', 'backend.websites.show', 'websites.edit') ? 'is-active' : '' }}">
                             Моите сайтове
                         </a>
                     </li>
@@ -156,7 +156,11 @@
 
                     <li>
                         <a href="{{ route('backend.domain.index') }}"
-                            class="{{ request()->routeIs('backend.domain.index', 'backend.domain.show') ? 'is-active' : '' }}">
+                            class="{{
+                            request()->routeIs('backend.domain.index',
+                            'backend.domain.show',
+                            'backend.domain.dns-records',
+                            'backend.domain.nameservers') ? 'is-active' : '' }}">
                             Моите домейни
                         </a>
                     </li>
