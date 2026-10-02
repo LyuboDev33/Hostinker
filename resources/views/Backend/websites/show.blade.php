@@ -161,7 +161,8 @@
                                 </div>
 
 
-                                <a href="#" class="website-outline-btn website-outline-btn--small">
+                                <a href="{{ route('backend.websites.database', $website->domain_name) }}"
+                                    class="website-outline-btn website-outline-btn--small">
                                     Управление
                                 </a>
 
@@ -222,7 +223,8 @@
                                 </div>
 
 
-                                <a href="" class="website-outline-btn website-outline-btn--small">
+                                <a href="{{ route('backend.files.show', $website->domain_name) }}"
+                                    class="website-outline-btn website-outline-btn--small">
                                     Отвори
 
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>

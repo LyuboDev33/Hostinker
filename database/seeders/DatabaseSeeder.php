@@ -16,13 +16,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         $this->call([
-            RolesSeeder::class
+        User::factory()->create([
+            'name' => 'Lyubomir Stoyanov',
+            'email' => 'admin@hosthinker.com',
         ]);
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            RolesSeeder::class,
+            AssignRoleSeeder::class
+        ]);
     }
 }

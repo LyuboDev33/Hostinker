@@ -23,6 +23,8 @@ return new class extends Migration
 
             $table->string('domain_name')->unique();
             $table->integer('price');
+            $table->integer('period_in_years');
+
 
             $table->dateTime('registered_at')->nullable();
             $table->dateTime('expires_at')->nullable();

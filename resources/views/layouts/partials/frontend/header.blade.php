@@ -13,50 +13,7 @@
                                     <a href="/"><img src="/assets/img/logo/logo02.svg" alt="Logo"></a>
                                 </div>
                                 <ul class="navigation d-none d-lg-flex">
-                                    <li class="active menu-item-has-children tg-mega-menu-has-children"><a
-                                            href="#">Начало</a>
-                                        <div class="tg-mega-menu-wrap">
-                                            <h5 class="mega-menu-title">ВСИЧКИ НАЧАЛНИ СТРАНИЦИ</h5>
-                                            <div class="row row-cols-1 row-cols-lg-4 row-cols-xl-4">
-                                                <div class="col">
-                                                    <div class="mega-menu-item active">
-                                                        <div class="mega-menu-thumb">
-                                                            <a href="/"><img
-                                                                    src="/assets/img/menu-images/home-01.jpg"
-                                                                    alt="img"></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="mega-menu-item active">
-                                                        <div class="mega-menu-thumb">
-                                                            <a href="index-2.html"><img
-                                                                    src="/assets/img/menu-images/home-02.jpg"
-                                                                    alt="img"></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="mega-menu-item active">
-                                                        <div class="mega-menu-thumb">
-                                                            <a href="index-3.html"><img
-                                                                    src="/assets/img/menu-images/home-03.jpg"
-                                                                    alt="img"></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="mega-menu-item active">
-                                                        <div class="mega-menu-thumb">
-                                                            <a href="index-4.html"><img
-                                                                    src="/assets/img/menu-images/home-04.jpg"
-                                                                    alt="img"></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    <li><a href="/">Начало</a> </li>
                                     <li class="menu-item-has-children tg-mega-menu-has-children"><a
                                             href="#">Хостинг</a>
                                         <div class="tg-mega-menu-wrap tg-mega-menu-wrap-two">

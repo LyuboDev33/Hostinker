@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DNSRecordRequest;
 use App\Models\Domain;
 use App\Services\DNSService;
 use App\Services\DomainService;
@@ -22,7 +23,9 @@ class BackendDomainController extends Controller
     /** Return all the domains */
     public function index()
     {
-        $domains = Domain::where('user_id', Auth::id())->get();
+        $domains = Domain::where('user_id', Auth::id())
+                    ->orderBy('created_at', 'desc')
+                    ->get();
 
         return view('Backend.domains.Index', [
             'domains' => $domains
@@ -121,91 +124,70 @@ class BackendDomainController extends Controller
     {
         $dnsRecords = $this->dnsService->dnsRecords($domainName);
 
-        // dd($dnsRecords);
-
         return view('Backend.domains.dns-records', [
             'dnsRecords' => $dnsRecords,
             'domainName'     => $domainName
         ]);
     }
 
-  /**
- * Create a new DNS record.
- *
- * @param Request $request
- * @param string $domain
- * @return RedirectResponse
- */
-public function createDNSrecord(Request $request, string $domain): RedirectResponse {
-    $validated = $request->validate([
-        'type' => ['required','in:A,AAAA,ANAME,CNAME,MX,NS,SRV,TXT',],
+    /**
+     * Create a new DNS record.
+     *
+     * @param Request $request
+     * @param string $domain
+     * @return RedirectResponse
+     */
+    public function createDNSrecord(DNSRecordRequest $request, string $domain): RedirectResponse
+    {
+        $validated = $request->validated();
+        $record = $request->record($validated);
 
-        'host' => [
-            'required',
-            'string',
-        ],
+        $response = $this->dnsService->createDNSrecord($domain, $record);
 
-        'answer' => [
-            'required',
-            'string',
-        ],
+        if (isset($response['message'])) {
+            return back()->withErrors(['dns_record' => $response['message']])->withInput();
+        }
 
-        'ttl' => [
-            'required',
-            'integer',
-            'min:300',
-        ],
-
-        'priority' => [
-            'nullable',
-            'required_if:type,MX,SRV',
-            'integer',
-            'min:0',
-        ],
-    ], [
-        'type.required' => 'Моля, изберете тип на DNS записа.',
-        'type.in' => 'Избраният тип DNS запис е невалиден.',
-
-        'host.required' => 'Моля, въведете име / host.',
-
-        'answer.required' => 'Моля, въведете стойност / answer.',
-
-        'ttl.required' => 'Моля, въведете TTL.',
-        'ttl.integer' => 'TTL трябва да бъде цяло число.',
-        'ttl.min' => 'Минималният TTL, позволен от Name.com, е 300 секунди.',
-
-        'priority.required_if' =>
-            'Приоритетът е задължителен за MX и SRV записи.',
-
-        'priority.integer' =>
-            'Приоритетът трябва да бъде цяло число.',
-
-        'priority.min' =>
-            'Приоритетът не може да бъде отрицателен.',
-    ]);
-
-    $record = [
-        'type' => $validated['type'],
-        'host' => $validated['host'],
-        'answer' => $validated['answer'],
-        'ttl' => $validated['ttl'],
-    ];
-
-    if (in_array($validated['type'], ['MX', 'SRV'], true)) {
-        $record['priority'] = $validated['priority'];
+        return back()->with('success', 'DNS записът беше добавен успешно.');
     }
 
-    $response = $this->dnsService->createDNSrecord($domain, $record);
+    /**
+     * Update an existing DNS record.
+     *
+     * @param Request $request
+     * @param string $domain
+     * @param int $recordId
+     * @return RedirectResponse
+     */
+    public function updateDNSrecord(DNSRecordRequest $request, string $domain, int $recordId): RedirectResponse
+    {
+        $validated = $request->validated();
+        $record = $request->record($validated);
 
-    if (isset($response['message'])) {
-        return back()
-            ->withErrors([
-                'dns_record' => $response['message'],
-            ])
-            ->withInput();
+        $response = $this->dnsService->updateDNSrecord($domain, $recordId, $record);
+
+        if (isset($response['message'])) {
+            return back()->withErrors(['dns_record' => $response['message']])->withInput();
+        }
+
+        return back()->with('success', 'DNS записът беше обновен успешно.');
     }
 
-    return back()->with('success', 'DNS записът беше добавен успешно.');
-}
+    /**
+     * Delete an existing DNS record.
+     *
+     * @param string $domain
+     * @param int $recordId
+     * @return RedirectResponse
+     */
+    public function deleteDNSrecord(string $domain, int $recordId): RedirectResponse
+    {
+        $response = $this->dnsService->deleteDNSrecord($domain, $recordId);
 
+        if (isset($response['message'])) {
+            return back()->withErrors(['dns_record' => $response['message']]);
+        }
+
+        return back()->with('success', 'DNS записът беше изтрит успешно.');
+    }
 }

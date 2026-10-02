@@ -13682,3 +13682,1064 @@ textarea {
     }
 
 }
+
+
+
+        .verify-email__area {
+            min-height: 100vh;
+            background: #fff;
+        }
+
+        .verify-email__area > .container-fluid,
+        .verify-email__area > .container-fluid > .row {
+            min-height: 100vh;
+        }
+
+        .verify-email__content {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .verify-email__content::before {
+            content: "";
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.025);
+            top: -190px;
+            left: -150px;
+        }
+
+        .verify-email__content::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.02);
+            right: -140px;
+            bottom: -100px;
+        }
+
+        .verify-email__box {
+            width: 100%;
+            max-width: 570px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .verify-email__icon {
+            width: 86px;
+            height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 28px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            color: #111;
+            position: relative;
+        }
+
+        .verify-email__icon::after {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            border: 1px solid #e5e5e5;
+            border-radius: 50%;
+        }
+
+        .verify-email__icon svg {
+            width: 38px;
+            height: 38px;
+        }
+
+        .verify-email__heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .verify-email__heading h1 {
+            font-size: 36px;
+            line-height: 1.2;
+            color: #111;
+            margin-bottom: 14px;
+        }
+
+        .verify-email__heading p {
+            max-width: 470px;
+            margin: 0 auto;
+            color: #777;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .verify-email__address {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+            background: #f8f8f8;
+            border: 1px solid #ebebeb;
+            border-radius: 10px;
+        }
+
+        .verify-email__address-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e5e5;
+            color: #111;
+        }
+
+        .verify-email__address-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .verify-email__address-content span {
+            display: block;
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .verify-email__address-content strong {
+            display: block;
+            color: #111;
+            font-size: 15px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .verify-email__success {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px 17px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #f1faf4;
+            border: 1px solid #ccebd5;
+            color: #2c7b43;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .verify-email__success i {
+            margin-top: 4px;
+        }
+
+        .verify-email__form .tg-btn {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .verify-email__help {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .verify-email__help p {
+            color: #8a8a8a;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .verify-email__logout {
+            margin-top: 32px;
+            padding-top: 25px;
+            border-top: 1px solid #eeeeee;
+            text-align: center;
+        }
+
+        .verify-email__logout p {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .verify-email__logout button {
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #111;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: underline;
+            transition: opacity 0.2s ease;
+        }
+
+        .verify-email__logout button:hover {
+            opacity: 0.65;
+        }
+
+        .verify-email__image {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url('/assets/img/images/login_img.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        @media (max-width: 991px) {
+
+            .verify-email__content {
+                padding: 50px 30px;
+            }
+
+            .verify-email__heading h1 {
+                font-size: 31px;
+            }
+
+        }
+
+        @media (max-width: 767px) {
+
+            .verify-email__content {
+                min-height: 100vh;
+                padding: 50px 20px;
+            }
+
+            .verify-email__image-column {
+                display: none;
+            }
+
+            .verify-email__heading h1 {
+                font-size: 28px;
+            }
+
+            .verify-email__icon {
+                width: 75px;
+                height: 75px;
+            }
+
+            .verify-email__icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
+        }
+
+
+        /* =====================================================
+   HOSTING PLANS ADMIN
+===================================================== */
+
+.hosting-admin {
+    padding: 40px 0 70px;
+}
+
+
+/* HEADER */
+
+.hosting-admin__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    margin-bottom: 30px;
+}
+
+.hosting-admin__header h1 {
+    margin: 8px 0 8px;
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.hosting-admin__header p {
+    margin: 0;
+
+    color: #767982;
+    font-size: 14px;
+}
+
+.hosting-admin__eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--tg-theme-primary);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hosting-admin__count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 130px;
+
+    padding: 15px 20px;
+
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.hosting-admin__count span {
+    color: var(--tg-heading-color);
+
+    font-size: 24px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.hosting-admin__count small {
+    margin-top: 6px;
+
+    color: #767982;
+    font-size: 12px;
+}
+
+
+/* LAYOUT */
+
+.hosting-admin__layout {
+    display: grid;
+
+    grid-template-columns: 380px minmax(0, 1fr);
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+/* CARD */
+
+.hosting-admin-card {
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+}
+
+.hosting-admin-card__header {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid #eef2f6;
+}
+
+.hosting-admin-card__header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 42px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: rgba(23, 189, 84, 0.1);
+
+    color: var(--tg-theme-primary);
+
+    font-size: 16px;
+}
+
+.hosting-admin-card__header h3 {
+    margin: 0 0 4px;
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.hosting-admin-card__header p {
+    margin: 0;
+
+    color: #767982;
+
+    font-size: 12px;
+}
+
+
+/* FORM */
+
+.hosting-plan-form {
+    padding: 24px;
+}
+
+.hosting-form-group {
+    margin-bottom: 20px;
+}
+
+.hosting-form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--tg-heading-color);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hosting-form-input {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+.hosting-form-input > i {
+    position: absolute;
+
+    left: 15px;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+
+    pointer-events: none;
+}
+
+.hosting-form-input input {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 15px 0 42px;
+
+    background: #fff;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 9px;
+
+    color: var(--tg-heading-color);
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+}
+
+.hosting-form-input input::placeholder {
+    color: #b1b5bf;
+
+    font-size: 13px;
+}
+
+.hosting-form-input input:focus {
+    border-color: var(--tg-theme-primary);
+
+    box-shadow: 0 0 0 3px rgba(23, 189, 84, 0.08);
+}
+
+.hosting-form-input--suffix input {
+    padding-right: 55px;
+}
+
+.hosting-form-input--suffix > span {
+    position: absolute;
+
+    right: 15px;
+
+    color: #767982;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hosting-form-error {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #dc2626;
+
+    font-size: 12px;
+}
+
+
+/* STATUS */
+
+.hosting-form-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin: 5px 0 24px;
+
+    padding: 15px;
+
+    background: #f8faf9;
+
+    border: 1px solid #e9eeeb;
+    border-radius: 10px;
+}
+
+.hosting-form-status strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--tg-heading-color);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hosting-form-status p {
+    margin: 0;
+
+    color: #767982;
+
+    font-size: 11px;
+}
+
+
+/* SWITCH */
+
+.hosting-switch {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    width: 44px;
+    height: 24px;
+
+    margin: 0;
+
+    cursor: pointer;
+}
+
+.hosting-switch input {
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    opacity: 0;
+}
+
+.hosting-switch__slider {
+    position: absolute;
+
+    inset: 0;
+
+    background: #d1d5db;
+
+    border-radius: 30px;
+
+    transition: 0.2s ease;
+}
+
+.hosting-switch__slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    top: 3px;
+    left: 3px;
+
+    background: #fff;
+
+    border-radius: 50%;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+
+    transition: 0.2s ease;
+}
+
+.hosting-switch input:checked + .hosting-switch__slider {
+    background: var(--tg-theme-primary);
+}
+
+.hosting-switch input:checked + .hosting-switch__slider::before {
+    transform: translateX(20px);
+}
+
+
+/* SUBMIT */
+
+.hosting-plan-form__submit {
+    justify-content: center;
+
+    width: 100%;
+    min-height: 48px;
+}
+
+
+/* PLAN LIST */
+
+.hosting-plans-list {
+    padding: 8px 24px 24px;
+}
+
+.hosting-plan-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 18px 0;
+
+    border-bottom: 1px solid #eef2f6;
+}
+
+.hosting-plan-item:last-child {
+    border-bottom: 0;
+}
+
+.hosting-plan-item__main {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+.hosting-plan-item__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 44px;
+
+    width: 44px;
+    height: 44px;
+
+    background: #f5f7f9;
+
+    border-radius: 10px;
+
+    color: #494c55;
+
+    font-size: 16px;
+}
+
+.hosting-plan-item__info {
+    min-width: 0;
+}
+
+.hosting-plan-item__title {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+}
+
+.hosting-plan-item__title h4 {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.hosting-plan-item__meta {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+}
+
+.hosting-plan-item__meta span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #767982;
+
+    font-size: 12px;
+}
+
+.hosting-plan-item__meta i {
+    color: #9ca3af;
+}
+
+
+/* STATUS BADGE */
+
+.hosting-plan-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.hosting-plan-status i {
+    font-size: 5px;
+}
+
+.hosting-plan-status--active {
+    background: #eaf8ef;
+
+    color: #1f9d55;
+}
+
+.hosting-plan-status--inactive {
+    background: #f3f4f6;
+
+    color: #6b7280;
+}
+
+
+/* PRICE */
+
+.hosting-plan-item__price {
+    flex: 0 0 auto;
+
+    text-align: right;
+}
+
+.hosting-plan-item__price strong {
+    display: block;
+
+    color: var(--tg-heading-color);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.hosting-plan-item__price span {
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* EMPTY */
+
+.hosting-plans-empty {
+    padding: 60px 25px;
+
+    text-align: center;
+}
+
+.hosting-plans-empty__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    background: #f5f7f9;
+
+    border-radius: 50%;
+
+    color: #9ca3af;
+
+    font-size: 22px;
+}
+
+.hosting-plans-empty h4 {
+    margin-bottom: 7px;
+
+    font-size: 16px;
+}
+
+.hosting-plans-empty p {
+    margin: 0;
+
+    color: #767982;
+
+    font-size: 13px;
+}
+
+
+/* ALERT */
+
+.hosting-admin__alert {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+    padding: 13px 16px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.hosting-admin__alert--success {
+    background: #eaf8ef;
+
+    border: 1px solid #ccebd7;
+
+    color: #1f8a4c;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 991px) {
+
+    .hosting-admin__layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .hosting-admin {
+        padding: 25px 0 50px;
+    }
+
+    .hosting-admin__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .hosting-admin__count {
+        align-items: flex-start;
+
+        width: 100%;
+    }
+
+    .hosting-plan-item {
+        align-items: flex-start;
+    }
+
+}
+
+
+@media (max-width: 575px) {
+
+    .hosting-admin-card__header,
+    .hosting-plan-form,
+    .hosting-plans-list {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .hosting-plan-item {
+        flex-direction: column;
+    }
+
+    .hosting-plan-item__price {
+        padding-left: 58px;
+
+        text-align: left;
+    }
+
+}
+
+
+/* =====================================================
+   HOSTING PLAN - PRICING UPDATE
+===================================================== */
+
+.hosting-form-help {
+    display: block;
+
+    margin-top: 7px;
+
+    color: #8b8e96;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ERROR ALERT */
+
+.hosting-admin__alert--error {
+    background: #fff1f1;
+
+    border: 1px solid #ffd1d1;
+
+    color: #dc2626;
+}
+
+
+/* STRIPE ID */
+
+.hosting-plan-item__stripe {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 8px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+.hosting-plan-item__stripe i {
+    color: #635bff;
+
+    font-size: 13px;
+}
+
+.hosting-plan-item__stripe span {
+    max-width: 200px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* PLAN PRICING */
+
+.hosting-plan-item__pricing {
+    display: flex;
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    gap: 14px;
+}
+
+.hosting-plan-price {
+    min-width: 120px;
+}
+
+.hosting-plan-price__label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    text-transform: uppercase;
+}
+
+.hosting-plan-price > div {
+    display: flex;
+    align-items: baseline;
+
+    gap: 4px;
+}
+
+.hosting-plan-price strong {
+    color: var(--tg-heading-color);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.hosting-plan-price > div > span {
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+.hosting-plan-price--renewal strong {
+    color: var(--tg-theme-primary);
+}
+
+
+/* PRICE ARROW */
+
+.hosting-plan-price__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    background: #f5f7f9;
+
+    border-radius: 50%;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1199px) {
+
+    .hosting-plan-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .hosting-plan-item__pricing {
+        padding-left: 58px;
+    }
+
+}
+
+
+@media (max-width: 575px) {
+
+    .hosting-plan-item__pricing {
+        align-items: flex-start;
+        flex-direction: column;
+
+        width: 100%;
+
+        padding-left: 58px;
+    }
+
+    .hosting-plan-price__arrow {
+        transform: rotate(90deg);
+    }
+
+}

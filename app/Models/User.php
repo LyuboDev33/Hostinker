@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -15,7 +15,7 @@ use Laravel\Cashier\Billable;
 
 #[Fillable(['name', 'email', 'password', 'profile_pic', 'facebook_page'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, Billable;
@@ -55,5 +55,5 @@ class User extends Authenticatable
     }
 
 
-    
+
 }

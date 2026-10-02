@@ -1,10 +1,21 @@
 <?php
 
+use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\DomainController;
 use Illuminate\Support\Facades\Route;
 use phpseclib4\Net\SSH2;
 
 Route::middleware(['auth', 'super_admin'])->group(function () {
+
+            /** Webhook subscription */
+        Route::prefix('/webhooks')->group(function () {
+
+            Route::get('/domain-expiry', [WebhookController::class, 'subscribeDomainExpiry'])->name('webhook.domain.expiry');
+            Route::get('/retrieve-webhooks', [WebhookController::class, 'retrieveAllWebhookSubscriptions']);
+
+            // Route::get('');
+
+        });
 
     Route::prefix('/api/domain')->group(function () {
         Route::get('/listing', [DomainController::class, 'listAllDomains']);
@@ -14,61 +25,24 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
 
 
 
-Route::get('/test', function () {
+// Route::get('/test', function () {
 
-    $ssh = new SSH2('72.61.179.145');
+//     $ssh = new SSH2('72.61.179.145');
 
-    if (!$ssh->login(env('VPS_USERNAME'), env('VPS_PASSWORD'))) {
-        dd('SSH login failed');
-    }
+//     if (!$ssh->login(env('VPS_USERNAME'), env('VPS_PASSWORD'))) {
+//         dd('SSH login failed');
+//     }
 
-    $rootPath = '/home/test_user1/domains/hosthinker.info/public_html';
+//     $command = <<<'BASH'
+// mysql -u root -p'ZTqRGZ2Fw82z' -e "
+// CREATE DATABASE \`u3_test3\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+// CREATE USER 'u3_test3'@'localhost' IDENTIFIED BY 'Test1234!';
+// GRANT ALTER, CREATE VIEW, INDEX, SELECT, DELETE, INSERT,
+// SHOW VIEW, ALTER ROUTINE, CREATE ROUTINE, DROP, LOCK TABLES,
+// TRIGGER, CREATE TEMPORARY TABLES, EXECUTE, REFERENCES, UPDATE, EVENT ON \`u3_test3\`.* TO 'u3_test3'@'localhost';
+// FLUSH PRIVILEGES;
+// "
+// BASH;
 
-    function getFilesTree($ssh, $path)
-    {
-        $output = $ssh->exec(
-            'find ' . escapeshellarg($path) . ' -mindepth 1 -maxdepth 1'
-        );
-
-        $files = array_filter(
-            explode("\n", trim($output))
-        );
-
-        $names = [];
-
-        foreach ($files as $file) {
-            $names[] = basename($file);
-        }
-
-        dd($names);
-
-        $lines = array_filter(explode("\n", trim($output)));
-
-        $items = [];
-
-        foreach ($lines as $line) {
-
-            [$name, $type] = explode('|', $line, 2);
-
-            $fullPath = $path . '/' . $name;
-
-            $item = [
-                'name' => $name,
-                'type' => $type === 'd' ? 'directory' : 'file',
-            ];
-
-            // If directory → recursively get its contents
-            if ($type === 'd') {
-                $item['children'] = getFilesTree($ssh, $fullPath);
-            }
-
-            $items[] = $item;
-        }
-
-        return $items;
-    }
-
-    $files = getFilesTree($ssh, $rootPath);
-
-    dd($files);
-});
+//     $ssh->exec($command);
+// });

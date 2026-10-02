@@ -20,7 +20,12 @@ return new class extends Migration
 
             $table->decimal('price', 10, 2);
 
+            $table->decimal('renewal_price', 10, 2);
+
             $table->boolean('is_active')->default(true);
+
+            $table->string('stripe_price', 255);
+            $table->string('stripe_price_renewal', 255);
 
             $table->timestamps();
         });

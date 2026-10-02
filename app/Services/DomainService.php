@@ -7,32 +7,31 @@ use GuzzleHttp\Promise\Utils;
 
 class DomainService
 {
-    private string $username;
-    private string $token;
-    private string $link;
-    private string $credentials;
-
-    private Client $client;
+    private ?Client $client = null;
 
     /**
-     * Create a new DomainService instance.
+     * Get the Name.com API client.
+     *
+     * @return Client
      */
-    public function __construct()
+    private function client(): Client
     {
-        $this->username = env('NAME_COM_USERNAME');
-        $this->token = env('NAME_COM_API');
-        $this->link = env('NAME_COM_API_URL');
+        $username = env('NAME_COM_USERNAME');
+        $token = env('NAME_COM_API');
+        $link = env('NAME_COM_API_URL');
 
-        $this->credentials = base64_encode($this->username . ':' . $this->token);
+        $credentials = base64_encode($username . ':' . $token);
 
         $this->client = new Client([
-            'base_uri' => rtrim($this->link, '/'),
+            'base_uri' => rtrim($link, '/'),
             'timeout' => 30,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Basic ' . $this->credentials,
+                'Authorization' => 'Basic ' . $credentials,
             ],
         ]);
+
+        return $this->client;
     }
 
     /**
@@ -43,7 +42,7 @@ class DomainService
      */
     public function retrieveDomainData(string $domainName)
     {
-        $response = $this->client->get(
+        $response = $this->client()->get(
             "/core/v1/domains/{$domainName}",
         );
 
@@ -52,8 +51,6 @@ class DomainService
         return $data;
     }
 
-
-   
     /**
      * Update domain nameservers.
      *
@@ -63,7 +60,7 @@ class DomainService
      */
     public function updateNameservers(string $domainName, array $nameservers): array
     {
-        $response = $this->client->post(
+        $response = $this->client()->post(
             "/core/v1/domains/{$domainName}:setNameservers",
             [
                 'json' => [
@@ -75,7 +72,6 @@ class DomainService
         return json_decode((string) $response->getBody(), true);
     }
 
-
     /**
      * Check domain availability.
      *
@@ -84,11 +80,11 @@ class DomainService
      *
      * @throws \Exception
      */
-    public function checkDomainAvailability(string $domainName): array
+    public function checkDomainAvailability(string $domainName)
     {
         $domainName = strtolower(trim($domainName));
 
-        $response = $this->client->post(
+        $response = $this->client()->post(
             '/core/v1/domains:checkAvailability',
             [
                 'json' => [
@@ -100,17 +96,14 @@ class DomainService
 
         $statusCode = $response->getStatusCode();
 
-        $data = json_decode(
-            (string) $response->getBody(),
-            true
-        );
+        $data = json_decode((string) $response->getBody(), true);
 
         if (
             $statusCode < 200 ||
             $statusCode >= 300
         ) {
             throw new \Exception(
-                'Грешка при свързването с услугата за проверка на домейни.'
+                'Възникна грешка....'
             );
         }
 
@@ -167,7 +160,6 @@ class DomainService
         return $domain;
     }
 
-
     /**
      * Register a domain.
      *
@@ -179,7 +171,7 @@ class DomainService
      */
     public function registerDomain(string $domainName, int $years = 1): array
     {
-        $response = $this->client->post(
+        $response = $this->client()->post(
             '/core/v1/domains',
             [
                 'json' => [
@@ -193,10 +185,7 @@ class DomainService
 
         $statusCode = $response->getStatusCode();
 
-        $data = json_decode(
-            (string) $response->getBody(),
-            true
-        );
+        $data = json_decode((string) $response->getBody(), true);
 
         if (
             $statusCode < 200 ||
@@ -244,7 +233,7 @@ class DomainService
             );
         }
 
-        $response = $this->client->patch(
+        $response = $this->client()->patch(
             "/core/v1/domains/{$domainName}",
             [
                 'json' => $data,
@@ -270,7 +259,6 @@ class DomainService
         return $result ?? [];
     }
 
-
     /**
      * Return all domain listings.
      *
@@ -280,7 +268,7 @@ class DomainService
      */
     public function listDomains(): array
     {
-        $response = $this->client->get(
+        $response = $this->client()->get(
             '/core/v1/domains',
             [
                 'query' => [
@@ -295,7 +283,6 @@ class DomainService
         return $data;
     }
 
-
     /**
      * Check domain pricing for registration years.
      *
@@ -307,12 +294,12 @@ class DomainService
      */
     public function checkDomainPrice(string $domainName, ?array $years = null): array
     {
-        $years = $years ?? range(1, 10);
+        $years = $years ?? range(1, 3);
 
         $promises = [];
 
         foreach ($years as $year) {
-            $promises[$year] = $this->client->getAsync(
+            $promises[$year] = $this->client()->getAsync(
                 "/core/v1/domains/{$domainName}:getPricing",
                 [
                     'query' => [
@@ -354,7 +341,6 @@ class DomainService
         return $prices;
     }
 
-
     /**
      * Get TLD pricing from Name.com.
      *
@@ -372,7 +358,7 @@ class DomainService
             'net',
         ];
 
-        $response = $this->client->get(
+        $response = $this->client()->get(
             '/core/v1/tldpricing',
             [
                 'query' => [
@@ -384,10 +370,22 @@ class DomainService
             ]
         );
 
-
         $data = json_decode((string) $response->getBody(), true);
 
-
         return $data;
+    }
+
+    /**
+     * Check account balance.
+     *
+     * @return array
+     */
+    public function checkAccountBalance(): array
+    {
+        $response = $this->client()->get(
+            '/core/v1/accountinfo/balance'
+        );
+
+        return json_decode((string) $response->getBody(), true);
     }
 }

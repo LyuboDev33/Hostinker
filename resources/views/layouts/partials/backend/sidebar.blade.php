@@ -23,11 +23,11 @@
                     <span>Администрация</span>
                 </li>
 
-
-                <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('admin.*') ? 'is-open' : '' }}">
+                <li
+                    class="dashboard-sidebar__item-has-children {{ request()->routeIs('super_admin.*') ? 'is-open' : '' }}">
 
                     <button type="button"
-                        class="dashboard-sidebar__menu-toggle {{ request()->routeIs('admin.*') ? 'is-active' : '' }}"
+                        class="dashboard-sidebar__menu-toggle {{ request()->routeIs('super_admin.*') ? 'is-active' : '' }}"
                         data-sidebar-submenu>
 
                         <span class="dashboard-sidebar__menu-main">
@@ -44,28 +44,33 @@
 
                     </button>
 
-
                     <ul class="dashboard-sidebar__submenu">
 
                         <li>
                             <a href="{{ route('super_admin.blog.index') }}"
-                                class="{{ request()->routeIs('admin.users.blog*') ? 'is-active' : '' }}">
+                                class="{{ request()->routeIs('super_admin.blog.*') ? 'is-active' : '' }}">
                                 Блог
                             </a>
                         </li>
 
                         <li>
-                            <a {{-- href="{{ route('admin.users.index') }}" --}}
-                                class="{{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}">
+                            <a {{-- href="{{ route('super_admin.users.index') }}" --}}
+                                class="{{ request()->routeIs('super_admin.users.*') ? 'is-active' : '' }}">
                                 Потребители
                             </a>
                         </li>
 
-
+                        <li>
+                            <a href=""
+                                class="{{ request()->routeIs('super_admin.domains.*') ? 'is-active' : '' }}">
+                                Домейни
+                            </a>
+                        </li>
 
                         <li>
-                            <a href="" class="{{ request()->routeIs('admin.domains.*') ? 'is-active' : '' }}">
-                                Домейни
+                            <a href="{{ route('super_admin.hosting.index') }}"
+                                class="{{ request()->routeIs('super_admin.hosting.*') ? 'is-active' : '' }}">
+                                Хостинг планове
                             </a>
                         </li>
 
@@ -89,7 +94,8 @@
 
 
             {{-- Websites --}}
-            <li class="dashboard-sidebar__item-has-children {{ request()->routeIs('backend.websites.*') ? 'is-open' : '' }}">
+            <li
+                class="dashboard-sidebar__item-has-children {{ request()->routeIs('backend.websites.*') ? 'is-open' : '' }}">
 
                 <button type="button"
                     class="dashboard-sidebar__menu-toggle {{ request()->routeIs('websites.*') ? 'is-active' : '' }}"
@@ -156,18 +162,20 @@
 
                     <li>
                         <a href="{{ route('backend.domain.index') }}"
-                            class="{{
-                            request()->routeIs('backend.domain.index',
-                            'backend.domain.show',
-                            'backend.domain.dns-records',
-                            'backend.domain.nameservers') ? 'is-active' : '' }}">
+                            class="{{ request()->routeIs(
+                                'backend.domain.index',
+                                'backend.domain.show',
+                                'backend.domain.dns-records',
+                                'backend.domain.nameservers',
+                            )
+                                ? 'is-active'
+                                : '' }}">
                             Моите домейни
                         </a>
                     </li>
 
                     <li>
-                        <a
-                            class="{{ request()->routeIs('backend.domain.create') ? 'is-active' : '' }}">
+                        <a class="{{ request()->routeIs('backend.domain.create') ? 'is-active' : '' }}">
                             Регистрирай домейн
                         </a>
                     </li>

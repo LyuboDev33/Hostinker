@@ -54,7 +54,8 @@
                                         <div class="backend-domain-row__name">
                                             <span>{{ $domain->domain_name }}</span>
 
-                                            <a href="https://{{ $domain->domain_name }}" target="_blank" rel="noopener noreferrer" title="Отвори домейна">
+                                            <a href="{{ route('backend.websites.show', $domain->domain_name) }}"
+                                                target="_blank" rel="noopener noreferrer" title="Отвори домейна">
                                                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                             </a>
                                         </div>
@@ -86,7 +87,8 @@
 
                                 <div class="backend-domain-row__actions">
 
-                                    <a href="#" class="backend-domain-row__button">
+                                    <a href="{{ route('backend.websites.show', $domain->domain_name) }}"
+                                       class="backend-domain-row__button">
                                         <i class="fa-solid fa-gear"></i>
                                         Управление
                                     </a>

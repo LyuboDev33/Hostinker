@@ -6,38 +6,35 @@ use GuzzleHttp\Client;
 
 class DNSService
 {
-
-    private string $username;
-    private string $token;
-    private string $link;
-    private string $credentials;
-
-    private Client $client;
+    private ?Client $client = null;
 
     /**
-     * Create a new DomainService instance.
+     * Get the Name.com API client.
+     *
+     * @return Client
      */
-    public function __construct()
+    private function client(): Client
     {
-        $this->username = env('NAME_COM_USERNAME');
-        $this->token = env('NAME_COM_API');
-        $this->link = env('NAME_COM_API_URL');
+        $username = env('NAME_COM_USERNAME');
+        $token = env('NAME_COM_API');
+        $link = env('NAME_COM_API_URL');
 
-        $this->credentials = base64_encode($this->username . ':' . $this->token);
+        $credentials = base64_encode($username . ':' . $token);
 
         $this->client = new Client([
-            'base_uri' => rtrim($this->link, '/'),
+            'base_uri' => rtrim($link, '/'),
             'timeout' => 30,
             'http_errors' => false,
             'headers' => [
-                'Authorization' => 'Basic ' . $this->credentials,
+                'Authorization' => 'Basic ' . $credentials,
             ],
         ]);
+
+        return $this->client;
     }
 
-
-
-    /** Retrieve the dns records of a domain
+    /**
+     * Retrieve the dns records of a domain
      *
      * @param string $domainName
      * @return array
@@ -46,7 +43,7 @@ class DNSService
     {
         $domainNaming = strtolower(trim($domainName));
 
-        $response = $this->client->get(
+        $response = $this->client()->get(
             "/core/v1/domains/{$domainNaming}/records?perPage=500",
         );
 
@@ -66,7 +63,7 @@ class DNSService
     {
         $domainNaming = strtolower(trim($domainName));
 
-        $response = $this->client->post(
+        $response = $this->client()->post(
             "/core/v1/domains/{$domainNaming}/records",
             [
                 'json' => $record,
@@ -74,5 +71,93 @@ class DNSService
         );
 
         return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Update an existing DNS record for a domain.
+     *
+     * @param string $domainName
+     * @param int $recordId
+     * @param array $record
+     * @return array
+     */
+    public function updateDNSrecord(string $domainName, int $recordId, array $record): array
+    {
+        $domainNaming = strtolower(trim($domainName));
+
+        $response = $this->client()->put(
+            "/core/v1/domains/{$domainNaming}/records/{$recordId}",
+            [
+                'json' => $record,
+            ]
+        );
+
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Delete an existing DNS record.
+     *
+     * @param string $domainName
+     * @param int $recordId
+     * @return array
+     */
+    public function deleteDNSrecord(string $domainName, int $recordId): array
+    {
+        $domainNaming = strtolower(trim($domainName));
+
+        $response = $this->client()->delete(
+            "/core/v1/domains/{$domainNaming}/records/{$recordId}"
+        );
+
+        if ($response->getStatusCode() === 204) {
+            return ['success' => true];
+        }
+
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Configure the necessary DNS records when a domain is bought.
+     *
+     * @param string $domainName
+     * @return array
+     */
+    public function assignNecessaryDNSRecords(string $domainName): array
+    {
+        $domainNaming = strtolower(trim($domainName));
+
+        $records = [
+            [
+                'type' => 'A',
+                'host' => '@',
+                'answer' => env('VPS_HOST'),
+                'ttl' => 3600,
+            ],
+            [
+                'type' => 'CNAME',
+                'host' => 'www',
+                'answer' => $domainNaming,
+                'ttl' => 3600,
+            ],
+        ];
+
+        $responses = [];
+
+        foreach ($records as $record) {
+            $response = $this->client()->post(
+                "/core/v1/domains/{$domainNaming}/records",
+                [
+                    'json' => $record,
+                ]
+            );
+
+            $responses[] = [
+                'status' => $response->getStatusCode(),
+                'response' => json_decode((string) $response->getBody(), true),
+            ];
+        }
+
+        return $responses;
     }
 }

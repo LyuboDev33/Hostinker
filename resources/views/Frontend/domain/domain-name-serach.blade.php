@@ -1,5 +1,24 @@
 <x-frontend>
 
+ @section('SEO')
+    <!-- Primary Meta Tags -->
+    <title>Регистрация на Домейн | Проверка и Купуване на Домейни</title>
+    <meta name="description" content="Проверете дали желаният домейн е свободен и го регистрирайте бързо и лесно. Изберете между популярни домейн разширения като .com, .net, .org, .eu, .tech и други.">
+    <meta name="keywords" content="регистрация на домейн, купуване на домейн, проверка на домейн, свободен домейн, домейни, домейн име, регистрация на домейни, проверка за свободен домейн, .com домейн, .eu домейн, .net домейн, DNS управление">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Регистрация на Домейн | Проверка и Купуване на Домейни">
+    <meta property="og:description" content="Намерете подходящия домейн за вашия сайт. Проверете свободен ли е желаният домейн, изберете разширение и го регистрирайте лесно онлайн.">
+    <meta property="og:url" content="{{ route('domain') }}">
+    <meta property="og:image" content="{{ asset('assets/img/images/domain_img.jpg') }}">
+
+    <!-- Twitter -->
+    <meta name="twitter:title" content="Регистрация на Домейн | Проверка и Купуване на Домейни">
+    <meta name="twitter:description" content="Проверете дали желаният домейн е свободен и регистрирайте .com, .net, .org, .eu, .tech и други домейн разширения лесно онлайн.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ asset('assets/img/images/domain_img.jpg') }}">
+@endsection
+
     <!-- domain__search-area -->
     <section class="domain__search-area-two has-animation domain__search-bg"
         data-background="assets/img/bg/domain_search_bg02.jpg">

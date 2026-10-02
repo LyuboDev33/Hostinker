@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class RolesSeeder extends Seeder
 {
@@ -13,27 +12,20 @@ class RolesSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('roles')->insert([
-            [
-                'role_name' => Role::SUPER_ADMIN,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_name' => Role::ADMIN,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_name' => Role::SUPPORT_AGENT,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'role_name' => Role::CLIENT,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        Role::firstOrCreate([
+            'role_name' => Role::SUPER_ADMIN,
+        ]);
+
+        Role::firstOrCreate([
+            'role_name' => Role::ADMIN,
+        ]);
+
+        Role::firstOrCreate([
+            'role_name' => Role::SUPPORT_AGENT,
+        ]);
+
+        Role::firstOrCreate([
+            'role_name' => Role::CLIENT,
         ]);
     }
 }

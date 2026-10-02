@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BlogAdminController;
-use App\Http\Controllers\Admin\WebhookController;
+use App\Http\Controllers\Admin\HostingAdminController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -9,16 +9,11 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
 
     Route::prefix('/admin')->group(function () {
 
-        /** Webhook subscription */
-        Route::prefix('/webhooks')->group(function () {
-
-            Route::get('/domain-expiry', [WebhookController::class, 'subscribeDomainExpiry'])->name('webhook.domain.expiry');
-            Route::get('/retrieve-webhooks', [WebhookController::class, 'retrieveAllWebhookSubscriptions']);
-
-            Route::get('');
-
+        /** Hosting plans */
+        Route::prefix('/hosting')->group(function() {
+            Route::get('/', [HostingAdminController::class, 'index'])->name('super_admin.hosting.index');
+            Route::post('/', [HostingAdminController::class, 'store'])->name('super_admin.hosting.store');
         });
-
 
         /** Blog Routing */
         Route::prefix('/blog')->group(function () {

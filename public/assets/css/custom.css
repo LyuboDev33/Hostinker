@@ -1609,3 +1609,163 @@
     }
 
 }
+
+
+/* DATABASE MANAGEMENT */
+
+.database-card__body {
+    padding: 25px;
+}
+
+.database-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.database-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.database-form__group--full {
+    grid-column: 1 / -1;
+}
+
+.database-form__group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #252c36;
+}
+
+.database-form__group input {
+    width: 100%;
+    height: 48px;
+    padding: 12px 15px;
+    background: #fff;
+    border: 1px solid #dce1e8;
+    border-radius: 9px;
+    color: #202733;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.database-form__group input::placeholder {
+    color: #a0a7b2;
+}
+
+.database-form__group input:focus {
+    outline: none;
+    border-color: #17bd54;
+    box-shadow: 0 0 0 3px rgba(23, 189, 84, 0.1);
+}
+
+.database-form__group small {
+    color: #858e9b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.database-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid #edf0f3;
+}
+
+
+/* DATABASE TABLE */
+
+.database-list {
+    margin-top: 28px;
+}
+
+.database-list__table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.database-list__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.database-list__table th {
+    padding: 17px 22px;
+    background: #fafbfc;
+    border-bottom: 1px solid #edf0f3;
+    color: #77808d;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.database-list__table td {
+    padding: 20px 22px;
+    border-bottom: 1px solid #edf0f3;
+    color: #424b58;
+    font-size: 13px;
+}
+
+.database-list__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.database-list__name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #252c36;
+    font-weight: 600;
+}
+
+.database-list__name i {
+    color: #17bd54;
+    font-size: 17px;
+}
+
+.database-list__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.database-list__delete {
+    color: #e04444;
+}
+
+.database-list__delete:hover {
+    color: #c52e2e;
+    border-color: #f0caca;
+    background: #fff5f5;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+    .database-card__body {
+        padding: 20px;
+    }
+
+    .database-form__grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .database-form__group--full {
+        grid-column: auto;
+    }
+
+    .database-form__actions .tg-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .database-list__table {
+        min-width: 650px;
+    }
+}

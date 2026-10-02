@@ -19,6 +19,7 @@ class Domain extends Model
         'user_id',
         'domain_name',
         'price',
+        'period_in_years',
         'registered_at',
         'expires_at',
         'auto_renew',
