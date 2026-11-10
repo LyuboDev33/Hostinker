@@ -7,6 +7,7 @@ use phpseclib4\Net\SSH2;
 
 Route::middleware(['auth', 'super_admin'])->group(function () {
 
+
             /** Webhook subscription */
         Route::prefix('/webhooks')->group(function () {
 

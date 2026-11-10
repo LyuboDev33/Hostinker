@@ -11,28 +11,41 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_hostings', function (Blueprint $table) {
+        Schema::create('user_hosting', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('user_id')
-                ->constrained()
+                ->constrained('users')
                 ->cascadeOnDelete();
 
             $table->foreignId('hosting_plan_id')
                 ->constrained('hosting_plans')
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
 
-            $table->string('linux_user');
+            $table->foreignId('vps_id')
+                ->constrained('vps')
+                ->restrictOnDelete();
 
             $table->unsignedInteger('storage_gb');
 
+            // Stripe subscription
+            $table->string('stripe_subscription_id')->nullable()->unique();
+
+            // Hosting lifecycle
             $table->timestamp('starts_at')->nullable();
-
+            $table->timestamp('last_paid_at')->nullable();
             $table->timestamp('expires_at')->nullable();
+            $table->timestamp('suspended_at')->nullable();
+            $table->timestamp('deletion_due_at')->nullable();
+            $table->timestamp('resources_deleted_at')->nullable();
 
-            $table->boolean('is_active')->default(true);
+            // pending, active, suspended, deleting, deleted, failed
+            $table->string('status')->default('pending');
 
             $table->timestamps();
+
+            $table->index(['status', 'expires_at']);
+            $table->index(['status', 'deletion_due_at']);
         });
     }
 

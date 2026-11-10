@@ -36,11 +36,59 @@ namespace App\Models\Admin{
 	class Blog extends \Eloquent {}
 }
 
+namespace App\Models\Admin{
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $constant_package_name
+ * @property int $storage_gb
+ * @property numeric $price
+ * @property numeric $renewal_price
+ * @property bool $is_active
+ * @property string $stripe_price
+ * @property string $stripe_price_renewal
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserHosting> $hostingAccounts
+ * @property-read int|null $hosting_accounts_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereConstantPackageName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereRenewalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereStorageGb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereStripePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereStripePriceRenewal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereUpdatedAt($value)
+ */
+	class HostingPlan extends \Eloquent {}
+}
+
+namespace App\Models\Admin{
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VPS newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VPS newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|VPS query()
+ */
+	class VPS extends \Eloquent {}
+}
+
 namespace App\Models\Dashboard{
 /**
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDatabase whereUpdatedAt($value)
  */
 	class UserDatabase extends \Eloquent {}
 }
@@ -51,22 +99,22 @@ namespace App\Models{
  * @property int $user_id
  * @property string $status
  * @property string $domain_name
+ * @property int $is_domain_locked
  * @property numeric $price
  * @property int $period_in_years
  * @property \Illuminate\Support\Carbon|null $registered_at
  * @property \Illuminate\Support\Carbon|null $expires_at
- * @property bool $auto_renew
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereAutoRenew($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereDomainName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereExpiresAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereIsDomainLocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain wherePeriodInYears($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Domain whereRegisteredAt($value)
@@ -96,29 +144,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DomainDnsServer whereUserId($value)
  */
 	class DomainDnsServer extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * @property int $id
- * @property string $name
- * @property int $storage_gb
- * @property numeric $price
- * @property int $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereStorageGb($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|HostingPlan whereUpdatedAt($value)
- */
-	class HostingPlan extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -200,7 +225,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent {}
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
 
 namespace App\Models{
@@ -214,29 +239,12 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @property int $id
- * @property int $user_id
- * @property int $hosting_plan_id
- * @property string $linux_user
- * @property int $storage_gb
- * @property string|null $starts_at
- * @property string|null $expires_at
- * @property int $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Admin\HostingPlan|null $hostingPlan
+ * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\Admin\VPS|null $vps
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereExpiresAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereHostingPlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereLinuxUser($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereStartsAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereStorageGb($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|UserHosting whereUserId($value)
  */
 	class UserHosting extends \Eloquent {}
 }

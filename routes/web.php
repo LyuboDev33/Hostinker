@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\Backend\BackendDomainController;
 use App\Http\Controllers\Backend\BackendWebsitesController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\HostingController;
+use App\Http\Controllers\OnlinePaymentsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +17,19 @@ Route::get('/pricing', [FrontEndController::class, 'pricing'])->name('pricing');
 
 # Hosting routing
 Route::prefix('/hosting')->group(function () {
-    Route::get('/', [HostingController::class, 'index'])->name('hosting.index');
+    Route::get('/', [HostingController::class, 'index'])->name('hosting.shared');
+    Route::get('/wordpress', [HostingController::class, 'wordpress'])->name('hosting.wordpress');
+});
+
+Route::post('/test', [WebhookController::class, 'test']);
+
+
+/** All Subscription Routing  */
+Route::prefix('/subscription')->group(function () {
+    Route::post('/create/{priceId}/{plan}', [OnlinePaymentsController::class, 'createSubscription'])->name('subscription.create');
+    Route::get('/verify',  [OnlinePaymentsController::class, 'checkout'])->name('subscription.verify');
+    Route::post('/cancel', [OnlinePaymentsController::class, 'cancelSubscription'])->name('subscription.cancel');
+    Route::get('/fail',    [OnlinePaymentsController::class, 'fail'])->name('subscription.fail');
 });
 
 
@@ -45,11 +59,26 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::prefix('/dashboard/domains')->group(function () {
+
         Route::get('/', [BackendDomainController::class, 'index'])->name('backend.domain.index');
         Route::patch('/update/{domain_name}', [BackendDomainController::class, 'update'])->name('backend.domain.update');
 
+        // Domain management
+        Route::get('/{domainName}/manage', [BackendDomainController::class, 'domainManage'])->name('backend.domain.manage');
+        Route::post('/get-auth-code/{domainName}', [BackendDomainController::class, 'getDomainAuthCode'])->name('backend.domain.get-auth-code');
+        Route::post('/change-lock', [BackendDomainController::class, 'changeDomainLock'])->name('backend.domain.change-lock');
+
+        // Domain transfers
+        Route::get('/transfer', [BackendDomainController::class, 'transfer'])->name('backend.domain.transfer');
+
+        // Domain renewals
+        Route::get('/renew', [BackendDomainController::class, 'renewDomain'])->name('backend.domain.renew');
+
+        // Nameservers
         Route::get('/nameservers/{domain}', [BackendDomainController::class, 'retrieveNameservers'])->name('backend.domain.nameservers');
         Route::put('/nameservers/update/{domain}', [BackendDomainController::class, 'updateNameservers'])->name('backend.domain.update.nameservers');
+
+        // DNS Records
         Route::get('/dns-records/{domain}', [BackendDomainController::class, 'retrieveDNSrecords'])->name('backend.domain.dns-records');
         Route::post('/dns-records/{domain}/create', [BackendDomainController::class, 'createDNSrecord'])->name('backend.create.dns-record');
         Route::put('/domains/{domain}/dns-records/{recordId}', [BackendDomainController::class, 'updateDNSrecord'])->name('backend.update.dns-record');

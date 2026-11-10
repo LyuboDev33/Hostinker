@@ -1,38 +1,61 @@
+
 <x-backend>
 
     @section('SEO')
-        <title>Домейни</title>
+        <title>Моите уебсайтове</title>
     @endsection
-
 
     <section class="backend-domains">
         <div class="container">
 
             <div class="backend-domains__header">
                 <div class="backend-domains__heading">
-                    <span class="backend-domains__subtitle">Управление на домейни</span>
+                    <span class="backend-domains__subtitle">Управление на уебсайтове</span>
                     <h2>Моите уебсайтове</h2>
                     <p>Преглеждайте и управлявайте всички ваши уебсайтове, свързани с вашия акаунт.</p>
                 </div>
 
                 <div class="backend-domains__header-action">
-                    <a href="#" class="tg-btn tg-btn-two">
-                        <i class="fa-solid fa-plus"></i>
-                        Регистрирай домейн
-                    </a>
+                    <div class="dropdown">
+                        <button
+                            type="button"
+                            class="tg-btn tg-btn-two dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-solid fa-plus"></i>
+                            Създай уебсайт
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-code me-2"></i>
+                                    Custom PHP/HTML website
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-brands fa-wordpress me-2"></i>
+                                    WordPress website
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-
 
             <div class="backend-domains__card">
 
                 <div class="backend-domains__card-header">
                     <div>
-                        <h4>Домейни</h4>
-                        <span>{{ $websites->count() }} {{ $websites->count() === 1 ? 'домейн' : 'домейна' }}</span>
+                        <h4>Уебсайтове</h4>
+                        <span>
+                            {{ $websites->count() }}
+                            {{ $websites->count() === 1 ? 'уебсайт' : 'уебсайта' }}
+                        </span>
                     </div>
                 </div>
-
 
                 @if ($websites->isNotEmpty())
 
@@ -48,18 +71,18 @@
                                         <i class="fa-solid fa-globe"></i>
                                     </div>
 
-
                                     <div class="backend-domain-row__content">
 
                                         <div class="backend-domain-row__name">
                                             <span>{{ $domain->domain_name }}</span>
 
                                             <a href="{{ route('backend.websites.show', $domain->domain_name) }}"
-                                                target="_blank" rel="noopener noreferrer" title="Отвори домейна">
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               title="Отвори уебсайта">
                                                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                             </a>
                                         </div>
-
 
                                         <div class="backend-domain-row__meta">
 
@@ -75,7 +98,7 @@
 
                                             <span>
                                                 <i class="fa-solid fa-user"></i>
-                                                Ваш домейн
+                                                Ваш уебсайт
                                             </span>
 
                                         </div>
@@ -83,7 +106,6 @@
                                     </div>
 
                                 </div>
-
 
                                 <div class="backend-domain-row__actions">
 
@@ -93,7 +115,10 @@
                                         Управление
                                     </a>
 
-                                    <button type="button" class="backend-domain-row__more" aria-label="Още действия">
+                                    <button
+                                        type="button"
+                                        class="backend-domain-row__more"
+                                        aria-label="Още действия">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </button>
 
@@ -113,14 +138,39 @@
                             <i class="fa-solid fa-globe"></i>
                         </div>
 
-                        <h4>Все още нямате добавени домейни</h4>
+                        <h4>Все още нямате сайтове</h4>
 
-                        <p>Регистрирайте нов домейн или добавете съществуващ домейн към вашия хостинг акаунт.</p>
+                        <p>
+                            Създайте своя първи уебсайт, като изберете
+                            между Custom PHP/HTML или WordPress.
+                        </p>
 
-                        <a href="#" class="tg-btn tg-btn-two">
-                            <i class="fa-solid fa-plus"></i>
-                            Регистрирай първия си домейн
-                        </a>
+                        <div class="dropdown">
+                            <button
+                                type="button"
+                                class="tg-btn tg-btn-two dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-plus"></i>
+                                Създай уебсайт
+                            </button>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-code me-2"></i>
+                                        Custom PHP/HTML website
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-brands fa-wordpress me-2"></i>
+                                        WordPress website
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
                     </div>
 

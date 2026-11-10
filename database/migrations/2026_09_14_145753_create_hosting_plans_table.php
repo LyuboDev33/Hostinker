@@ -22,6 +22,9 @@ return new class extends Migration
 
             $table->decimal('renewal_price', 10, 2);
 
+
+            $table->string('constant_package_name')->unique();
+
             $table->boolean('is_active')->default(true);
 
             $table->string('stripe_price', 255);

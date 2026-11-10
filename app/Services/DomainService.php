@@ -192,13 +192,60 @@ class DomainService
             $statusCode >= 300
         ) {
             throw new \Exception(
-                "Възникна грешка при регистрацията на домейна {$domainName}."
+                "Възникна грешка при регистрацията на домейна: {$data['details']}."
             );
         }
 
         return [
             'status' => $statusCode,
             'response' => $data,
+            'raw' => (string) $response->getBody(),
+        ];
+    }
+
+    /**
+     * Renew an existing domain.
+     *
+     * @param string $domainName
+     * @param int $years
+     * @param float|null $purchasePrice
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function renewDomain(string $domainName, int $years = 1, ?float $purchasePrice = null): array
+    {
+        $data = [
+            'years' => $years,
+        ];
+
+        if ($purchasePrice !== null) {
+            $data['purchasePrice'] = $purchasePrice;
+        }
+
+        $response = $this->client()->post(
+            "/core/v1/domains/{$domainName}:renew",
+            [
+                'json' => $data,
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        $result = json_decode((string) $response->getBody(), true);
+
+        if (
+            $statusCode < 200 ||
+            $statusCode >= 300
+        ) {
+            throw new \Exception(
+                "Възникна грешка при подновяването на домейна {$domainName}."
+            );
+        }
+
+        return [
+            'status' => $statusCode,
+            'response' => $result,
             'raw' => (string) $response->getBody(),
         ];
     }
@@ -258,6 +305,86 @@ class DomainService
 
         return $result ?? [];
     }
+
+    /**
+     * Update domain lock status.
+     *
+     * @param string $domainName
+     * @param bool $locked
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function updateDomainLock(string $domainName, bool $locked): array
+    {
+        $response = $this->client()->patch(
+            "/core/v1/domains/{$domainName}",
+            [
+                'json' => [
+                    'locked' => $locked,
+                ],
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        $result = json_decode(
+            (string) $response->getBody(),
+            true
+        );
+
+        if (
+            $statusCode === 409 &&
+            str_contains($result['message'] ?? '', 'Domain can not be unlocked')
+        ) {
+            throw new \Exception(
+                'Домейнът не може да бъде отключен, тъй като все още не са изминали 60 дни от регистрацията или последната промяна, която е наложила ограничението.',
+                409
+            );
+        }
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new \Exception(
+                "Възникна грешка при промяната на заключването на домейна {$domainName}.",
+                $statusCode
+            );
+        }
+
+        return $result ?? [];
+    }
+
+
+    /**
+     * Retrieve the domain transfer authorization code.
+     *
+     * @param string $domainName
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getDomainAuthCode(string $domainName): array
+    {
+        $response = $this->client()->get(
+            "/core/v1/domains/{$domainName}:getAuthCode"
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        $result = json_decode(
+            (string) $response->getBody(),
+            true
+        );
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new \Exception(
+                $result['message'] ?? "Възникна грешка при извличането на кода за домейна {$domainName}.",
+                $statusCode
+            );
+        }
+
+        return $result ?? [];
+    }
+
 
     /**
      * Return all domain listings.

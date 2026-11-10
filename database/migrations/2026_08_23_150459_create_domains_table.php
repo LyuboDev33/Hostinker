@@ -25,10 +25,10 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('period_in_years');
 
+            $table->boolean('is_domain_locked')->default(true);
 
             $table->dateTime('registered_at')->nullable();
             $table->dateTime('expires_at')->nullable();
-            $table->boolean('auto_renew')->default(false);
 
             $table->timestamps();
         });

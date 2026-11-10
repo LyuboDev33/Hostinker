@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Admin\VPS;
 use GuzzleHttp\Client;
 
 class DNSService
@@ -121,9 +122,10 @@ class DNSService
      * Configure the necessary DNS records when a domain is bought.
      *
      * @param string $domainName
+     * @param VPS $vps
      * @return array
      */
-    public function assignNecessaryDNSRecords(string $domainName): array
+    public function assignNecessaryDNSRecords(string $domainName, VPS $vps): array
     {
         $domainNaming = strtolower(trim($domainName));
 
@@ -131,7 +133,7 @@ class DNSService
             [
                 'type' => 'A',
                 'host' => '@',
-                'answer' => env('VPS_HOST'),
+                'answer' => $vps->host,
                 'ttl' => 3600,
             ],
             [

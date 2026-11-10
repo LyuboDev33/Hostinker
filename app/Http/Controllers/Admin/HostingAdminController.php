@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\HostingPlan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HostingAdminController extends Controller
 {
@@ -37,6 +38,7 @@ class HostingAdminController extends Controller
 
         HostingPlan::create([
             'name' => $validated['name'],
+            'constant_package_name' => Str::slug($validated['name']),
             'storage_gb' => $validated['storage_gb'],
             'price' => $validated['price'],
             'renewal_price' => $validated['renewal_price'],

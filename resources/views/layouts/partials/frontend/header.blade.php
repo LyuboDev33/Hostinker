@@ -10,7 +10,7 @@
 
                             <div class="tgmenu__navbar-wrap tgmenu__main-menu">
                                 <div class="logo d-flex align-items-center">
-                                    <a href="/"><img src="/assets/img/logo/logo02.svg" alt="Logo"></a>
+                                    <x-logo width="200" />
                                 </div>
                                 <ul class="navigation d-none d-lg-flex">
                                     <li><a href="/">Начало</a> </li>
@@ -21,21 +21,24 @@
                                                 <h5 class="mega-menu-title mega-menu-title-two">НАДЕЖДЕН ХОСТИНГ ПЛАН
                                                 </h5>
                                                 <div class="row gutter-y-24">
+
+
                                                     <div class="col-lg-6">
                                                         <div class="mega-menu-item-two">
-                                                            <a href="hosting.html">
+                                                            <a href="{{ route('hosting.shared') }}">
                                                                 <div class="icon">
-                                                                    <img src="/assets/img/icon/hosting_icon01.svg"
+                                                                    <img src="/assets/img/icon/hosting_icon04.svg"
                                                                         alt="icon">
                                                                 </div>
                                                                 <div class="content">
-                                                                    <strong class="title">Уеб хостинг</strong>
-                                                                    <span>Доставчиците на уеб хостинг предлагат бързи,
-                                                                        сигурни и надеждни хостинг решения</span>
+                                                                    <strong class="title">Споделен хостинг</strong>
+                                                                    <span>Доставчиците на споделен хостинг предлагат
+                                                                        достъпен, надежден и сигурен хостинг</span>
                                                                 </div>
                                                             </a>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-lg-6">
                                                         <div class="mega-menu-item-two">
                                                             <a href="hosting-2.html">
@@ -52,74 +55,14 @@
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="mega-menu-item-two">
-                                                            <a href="hosting-4.html">
-                                                                <div class="icon">
-                                                                    <img src="/assets/img/icon/hosting_icon03.svg"
-                                                                        alt="icon">
-                                                                </div>
-                                                                <div class="content">
-                                                                    <strong class="title">Облачен хостинг</strong>
-                                                                    <span>Доставчиците на облачен хостинг предлагат
-                                                                        мащабируеми, сигурни и високопроизводителни
-                                                                        решения</span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="mega-menu-item-two">
-                                                            <a href="hosting-5.html">
-                                                                <div class="icon">
-                                                                    <img src="/assets/img/icon/hosting_icon04.svg"
-                                                                        alt="icon">
-                                                                </div>
-                                                                <div class="content">
-                                                                    <strong class="title">Споделен хостинг</strong>
-                                                                    <span>Доставчиците на споделен хостинг предлагат
-                                                                        достъпен, надежден и сигурен хостинг</span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="mega-menu-item-two">
-                                                            <a href="hosting-3.html">
-                                                                <div class="icon">
-                                                                    <img src="/assets/img/icon/hosting_icon05.svg"
-                                                                        alt="icon">
-                                                                </div>
-                                                                <div class="content">
-                                                                    <strong class="title">VPS хостинг</strong>
-                                                                    <span>Доставчиците на VPS хостинг предлагат
-                                                                        мащабируеми, сигурни и високопроизводителни
-                                                                        решения</span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="mega-menu-item-two">
-                                                            <a href="hosting.html">
-                                                                <div class="icon">
-                                                                    <img src="/assets/img/icon/hosting_icon06.svg"
-                                                                        alt="icon">
-                                                                </div>
-                                                                <div class="content">
-                                                                    <strong class="title">Дедициран хостинг</strong>
-                                                                    <span>Дедикирани хостинг решения за уебсайтове,
-                                                                        приложения и бизнеси.</span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
+
+
+
                                                 </div>
                                             </div>
-                                            <div class="tg-mega-menu-right-side">
+                                            {{-- <div class="tg-mega-menu-right-side">
                                                 <img src="/assets/img/menu-images/mega_menu-img.jpg" alt="img">
-                                                <h2 class="title"><span>70% отстъпка</span> за вашия първи домейн</h2>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </li>
                                     <li class="menu-item-has-children tg-mega-menu-has-children"><a
@@ -197,9 +140,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <a
-                                            {{-- href="{{ route('blog.index') }}" --}}
-                                            >
+                                        <a {{-- href="{{ route('blog.index') }}" --}}>
                                             Блог
                                         </a>
                                     </li>
@@ -214,8 +155,8 @@
                                     @if (Auth::check())
                                         <li class="header-btn">
                                             <a href="{{ route('dashboard') }}" class="tg-btn tg-btn-two">
-                                                <svg width="16" height="16" viewBox="0 0 16 16"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
                                                     <path
                                                         d="M6 5.33333V4C6 3.64638 6.14048 3.30724 6.39052 3.05719C6.64057 2.80714 6.97971 2.66667 7.33333 2.66667H12C12.3536 2.66667 12.6928 2.80714 12.9428 3.05719C13.1929 3.30724 13.3333 3.64638 13.3333 4V12C13.3333 12.3536 13.1929 12.6928 12.9428 12.9428C12.6928 13.1929 12.3536 13.3333 12 13.3333H7.33333C6.97971 13.3333 6.64057 13.1929 6.39052 12.9428C6.14048 12.6928 6 12.3536 6 12V10.6667"
                                                         stroke="currentColor" stroke-width="1.2"
@@ -273,9 +214,7 @@
 
                                 </ul>
                             </div>
-                            <a
-                            href="{{ route('domain.cart') }}"
-                            class="header-cart">
+                            <a href="{{ route('domain.cart') }}" class="header-cart">
 
                                 <i class="fa-solid fa-basket-shopping header-cart__icon"></i>
 

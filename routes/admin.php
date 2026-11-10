@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BlogAdminController;
 use App\Http\Controllers\Admin\HostingAdminController;
+use App\Http\Controllers\Admin\VPSAdminController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +24,13 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
             Route::patch('/update/{blog}', [BlogAdminController::class, 'update'])->name('super_admin.blog.update');
             Route::delete('/delete/{blog}', [BlogAdminController::class, 'delete'])->name('super_admin.blog.delete');
             Route::get('/{slug}', [BlogAdminController::class, 'show'])->name('super_admin.blog.show');
+        });
+
+        /** Routes for the VPS part */
+        Route::prefix('/vps')->group(function () {
+            Route::get('/', [VPSAdminController::class, 'index'])->name('super_admin.vps.index');
+            Route::post('/', [VPSAdminController::class, 'store'])->name('super_admin.vps.store');
+
         });
 
 

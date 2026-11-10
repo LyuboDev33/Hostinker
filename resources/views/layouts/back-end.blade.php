@@ -14,9 +14,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css?v=<?= time() ?>">
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.css">
 
@@ -29,7 +27,7 @@
 
     <link rel="stylesheet" href="/assets/css/main.css?v=<?= time() ?>">
 
-        <link rel="stylesheet" href="/assets/css/custom.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="/assets/css/custom.css?v=<?= time() ?>">
 
 
     <!-- jQuery -->
@@ -73,8 +71,6 @@
 
 
 
-    <!-- bootstrap -->
-    <script src="/assets/js/bootstrap.min.js?v=<?= time() ?>"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

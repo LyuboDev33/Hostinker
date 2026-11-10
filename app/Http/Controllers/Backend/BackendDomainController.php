@@ -7,6 +7,7 @@ use App\Http\Requests\DNSRecordRequest;
 use App\Models\Domain;
 use App\Services\DNSService;
 use App\Services\DomainService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +25,36 @@ class BackendDomainController extends Controller
     public function index()
     {
         $domains = Domain::where('user_id', Auth::id())
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('Backend.domains.Index', [
             'domains' => $domains
         ]);
+    }
+
+
+    public function renewDomain()
+    {
+        dd($this->domainService->listDomains());
+        try {
+            $domainName = 'lubodev.com';
+            $years = 1;
+
+            $result = $this->domainService->renewDomain($domainName, $years);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Домейнът беше подновен успешно.',
+                'data' => $result,
+            ]);
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -66,6 +91,110 @@ class BackendDomainController extends Controller
             );
         }
     }
+
+
+    /**
+     * Display domain management page.
+     *
+     * @param string $domainName
+     * @return View
+     */
+    public function domainManage(string $domainName): View
+    {
+        $domain = Domain::where('domain_name', $domainName)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('Backend.domains.Show', compact('domain'));
+    }
+
+    /**
+     * Retrieve domain transfer authorization code.
+     *
+     * @param string $domainName
+     * @return RedirectResponse
+     */
+    public function getDomainAuthCode(string $domainName): RedirectResponse
+    {
+        try {
+            $domain = Domain::where('domain_name', $domainName)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if (!$domain) {
+                return back()->with('error', 'Домейнът не е намерен или нямате права да го управлявате.');
+            }
+
+            $result = $this->domainService->getDomainAuthCode($domain->domain_name);
+
+            if (empty($result['authCode'])) {
+                return back()->with('error', 'Не беше намерен код за трансфер на домейна.');
+            }
+
+            return back()->with([
+                'success' => 'Кодът за трансфер беше извлечен успешно.',
+                'auth_code' => $result['authCode'],
+            ]);
+            
+        } catch (\Exception $exception) {
+            return back()->with('error', 'Неуспешно извличане на кода за трансфер.');
+        }
+    }
+
+
+
+    /**
+     * Change the domain "Locked" status.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changeDomainLock(Request $request): JsonResponse
+    {
+        $request->validate([
+            'domain_name' => ['required', 'string'],
+            'locked' => ['required', 'boolean'],
+        ]);
+
+
+        try {
+            $domain = Domain::where('domain_name', $request->domain_name)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if (!$domain) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Домейнът не е намерен или нямате права да го управлявате.',
+                ], 403);
+            }
+
+            $locked = $request->boolean('locked');
+
+            $this->domainService->updateDomainLock($domain->domain_name, $locked);
+
+            $domain->update([
+                'is_domain_locked' => $locked,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $locked
+                    ? 'Домейнът беше заключен успешно.'
+                    : 'Домейнът беше отключен успешно.',
+                'is_domain_locked' => $domain->is_domain_locked,
+            ]);
+        } catch (\Exception $exception) {
+
+            $statusCode = $exception->getCode() === 409 ? 409 : 500;
+
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], $statusCode);
+        }
+    }
+
 
     /** Return nameservers
      *
@@ -189,5 +318,11 @@ class BackendDomainController extends Controller
         }
 
         return back()->with('success', 'DNS записът беше изтрит успешно.');
+    }
+
+    /** Show the transfer view */
+    public function transfer()
+    {
+        return view('Backend.domains.transfer');
     }
 }

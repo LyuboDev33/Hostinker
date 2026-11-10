@@ -2828,6 +2828,7 @@ textarea {
 
 .tgmenu__nav .logo img {
     max-height: 45px;
+    object-fit: cover;
 }
 
 .tgmenu__navbar-wrap {
@@ -5802,13 +5803,13 @@ textarea {
     height: 100%;
 }
 
-.pricing__box.active .pricing__select .more-item {
+/* .pricing__box.active .pricing__select .more-item {
     display: none;
 }
 
 .pricing__box.active .pricing__select .less-item {
     display: block;
-}
+} */
 
 .pricing__box.active .pricing__select::after {
     transform: translateY(-50%) rotate(180deg);
@@ -6047,9 +6048,9 @@ textarea {
     }
 }
 
-.pricing__price .price.annual_price {
+/* .pricing__price .price.annual_price {
     display: none;
-}
+} */
 
 .pricing__price.change-subs-duration .price.monthly_price {
     display: none;
@@ -6089,10 +6090,10 @@ textarea {
     justify-content: center;
 }
 
-.pricing__list {
+/* .pricing__list {
     height: 340px;
     overflow: hidden;
-}
+} */
 
 .pricing__list .list-wrap li {
     margin-bottom: 20px;

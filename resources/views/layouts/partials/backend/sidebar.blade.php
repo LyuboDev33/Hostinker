@@ -46,6 +46,22 @@
 
                     <ul class="dashboard-sidebar__submenu">
 
+
+                        <li>
+                            <a href="{{ route('super_admin.vps.index') }}"
+                                class="{{ request()->routeIs('super_admin.vps.*') ? 'is-active' : '' }}">
+                                VPS
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('super_admin.hosting.index') }}"
+                                class="{{ request()->routeIs('super_admin.hosting.*') ? 'is-active' : '' }}">
+                                Хостинг планове
+                            </a>
+                        </li>
+
+
                         <li>
                             <a href="{{ route('super_admin.blog.index') }}"
                                 class="{{ request()->routeIs('super_admin.blog.*') ? 'is-active' : '' }}">
@@ -67,12 +83,6 @@
                             </a>
                         </li>
 
-                        <li>
-                            <a href="{{ route('super_admin.hosting.index') }}"
-                                class="{{ request()->routeIs('super_admin.hosting.*') ? 'is-active' : '' }}">
-                                Хостинг планове
-                            </a>
-                        </li>
 
                     </ul>
 
@@ -166,6 +176,7 @@
                                 'backend.domain.index',
                                 'backend.domain.show',
                                 'backend.domain.dns-records',
+                                'backend.domain.manage',
                                 'backend.domain.nameservers',
                             )
                                 ? 'is-active'
@@ -175,8 +186,9 @@
                     </li>
 
                     <li>
-                        <a class="{{ request()->routeIs('backend.domain.create') ? 'is-active' : '' }}">
-                            Регистрирай домейн
+                        <a href="{{ route('backend.domain.transfer') }}"
+                            class="{{ request()->routeIs('backend.domain.transfer') ? 'is-active' : '' }}">
+                            Трансфер на домейн
                         </a>
                     </li>
 

@@ -16,21 +16,21 @@ class DomainController extends Controller
 
     public function __construct(
         private DomainService $domainService,
-        private DNSService    $dnsService,
     ) {}
 
 
     /**
      * Extend the stripe class that will be used across all methods (where needed)
      * @return \Stripe\StripeClient
-    */
-    private function stripe(): \Stripe\StripeClient {
+     */
+    private function stripe(): \Stripe\StripeClient
+    {
         return new \Stripe\StripeClient(env('STRIPE_SECRET_DOMAIN_ACCOUNT'));
     }
 
 
     /**
-     * Validate the domain and create the Stripe Checkout session.
+     * Validate the domain, check if it is available and create the Stripe Checkout session.
      *
      * @param Request $request
      * @return RedirectResponse
@@ -38,18 +38,15 @@ class DomainController extends Controller
     public function registerDomain(Request $request): RedirectResponse
     {
         $request->validate([
-            'domainName' => ['required',  'string',],
-            'years' => ['required', 'integer', 'min:1', 'max:10',],
+            'domainName' => ['required', 'string'],
+            'years' => ['required', 'integer', 'min:1', 'max:10'],
         ]);
 
         try {
-
             $sessionDomain = session('cart.domain');
 
             if (!$sessionDomain) {
-                throw new \Exception(
-                    'Няма добавен домейн в количката.'
-                );
+                throw new \Exception('Няма добавен домейн в количката.');
             }
 
             $domainName = $request->domainName;
@@ -61,23 +58,24 @@ class DomainController extends Controller
                 );
             }
 
-            /** Check if the name.com account has enough money to buy a domain */
+            /** Check the Name.com account balance.
+             * Here we check if the balance is above 0
+             */
             $accountBalance = $this->domainService->checkAccountBalance();
 
-            if($accountBalance['balance']  <= 0) {
+            if ((float) $accountBalance['balance'] <= 0) {
                 throw new \Exception(
                     'Упс... грешка 2304. Моля свържете се с нас за допълнителни подробности.'
                 );
             }
 
-            /** We double check the availability coming from the request */
+            /** Double-check domain availability. */
             $availableDomain = $this->domainService->checkDomainAvailability($domainName);
 
-            /** We check what is the price of the domain based on the chosen years */
+            /** Retrieve the current domain price. */
             $currentPrice = $this->domainService->checkDomainPrice($domainName, [$years]);
 
             $apiPrice = $currentPrice[$years]['purchase_price'] ?? null;
-
             $sessionPrice = $sessionDomain['prices'][$years]['purchase_price'] ?? null;
 
             if ($apiPrice === null || $sessionPrice === null) {
@@ -92,6 +90,12 @@ class DomainController extends Controller
                 );
             }
 
+            /** Check whether the Name.com account has enough funds. */
+            if ((float) $accountBalance['balance'] < (float) $apiPrice) {
+                throw new \Exception(
+                    'Упссс... възникна грешка 33. Моля обърнете се към нашия екип в секция контакти.'
+                );
+            }
 
             $stripe = $this->stripe();
 
@@ -110,25 +114,28 @@ class DomainController extends Controller
                 ],
 
                 'mode' => 'payment',
+
+                'client_reference_id' => (string) Auth::id(),
+
                 'metadata' => [
+                    'user_id' => (string) Auth::id(),
                     'domain_name' => $availableDomain['domainName'],
                     'years' => (string) $years,
                     'price' => (string) $apiPrice,
                 ],
 
-                'success_url' => route('completeDomainPayment') . '?session_id={CHECKOUT_SESSION_ID}',
+                'success_url' => route('completeDomainPayment')
+                    . '?session_id={CHECKOUT_SESSION_ID}',
+
                 'cancel_url' => route('failPayment'),
             ]);
 
             return redirect()->away($stripeSession->url);
         } catch (\Exception $exception) {
-
-            return back()->with(
-                'error',
-                $exception->getMessage()
-            );
+            return back()->with('error', $exception->getMessage());
         }
     }
+
 
     /**
      * Complete the Stripe payment and register the domain.
@@ -138,7 +145,6 @@ class DomainController extends Controller
      */
     public function completeDomainPayment(Request $request): RedirectResponse
     {
-
         try {
             $sessionId = $request->input('session_id');
 
@@ -158,11 +164,15 @@ class DomainController extends Controller
             $years = (int) $stripeSession->metadata->years;
             $paidPrice = (float) $stripeSession->metadata->price;
 
-
             $availableDomain = $this->domainService->checkDomainAvailability($domainName);
+
             $result = $this->domainService->registerDomain($availableDomain['domainName'], $years);
 
-            if ($result['status'] < 200 || $result['status'] >= 300 || empty($result['response']['domain'])) {
+            if (
+                $result['status'] < 200 ||
+                $result['status'] >= 300 ||
+                empty($result['response']['domain'])
+            ) {
                 throw new \Exception(
                     'Домейнът беше платен, но регистрацията не беше успешна.'
                 );
@@ -170,7 +180,11 @@ class DomainController extends Controller
 
             $registeredDomain = $result['response']['domain'];
 
+            /** Disable automatic renewal through Name.com. */
+            /** Automatic renewal is disabled because of how the   */
+            $this->domainService->updateDomain($registeredDomain['domainName'], false);
 
+            /** Save the registered domain in our database. */
             Domain::create([
                 'user_id' => Auth::id(),
                 'domain_name' => $registeredDomain['domainName'],
@@ -178,36 +192,21 @@ class DomainController extends Controller
                 'period_in_years' => $years,
                 'registered_at' => $registeredDomain['createDate'] ?? null,
                 'expires_at' => $registeredDomain['expireDate'] ?? null,
-                'auto_renew' => $registeredDomain['autorenewEnabled'] ?? false,
             ]);
-
-            $this->dnsService->assignNecessaryDNSRecords($registeredDomain['domainName']);
-
-            $domainDnsServer = DomainDnsServer::create([
-                'user_id' => Auth::id(),
-                'domain_name' => $registeredDomain['domainName'],
-                'status' => 'pending',
-            ]);
-
-            ConfigureWebsite::dispatch($domainDnsServer->id);
 
             session()->forget('cart.domain');
 
             return redirect()
                 ->route('successPayment')
                 ->with('success', "Домейнът {$domainName} беше регистриран успешно.");
+
         } catch (\Exception $exception) {
-
-            dd($exception);
-
             return redirect()
                 ->route('failPayment')
-                ->with(
-                    'error',
-                    $exception->getMessage()
-                );
+                ->with('error', $exception->getMessage());
         }
     }
+
 
     /**
      * Check domain availability.

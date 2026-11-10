@@ -247,25 +247,7 @@
 
                                 <a href="#">
 
-                                    <svg class="left-icon"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none">
-
-                                        <path d="M9.16797 7.5L11.668 10L9.16797 12.5"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round" />
-
-                                        <circle cx="10"
-                                            cy="10"
-                                            r="7.5"
-                                            stroke="currentColor"
-                                            stroke-width="1.5" />
-
-                                    </svg>
+                                    
 
                                     <a href="{{ route('backend.domain.index') }}" class="text">
                                         Моите домейни

@@ -19,16 +19,15 @@ class Domain extends Model
         'user_id',
         'domain_name',
         'price',
+        'is_domain_locked',
         'period_in_years',
         'registered_at',
         'expires_at',
-        'auto_renew',
     ];
 
     protected $casts = [
         'registered_at' => 'datetime',
         'expires_at' => 'datetime',
-        'auto_renew' => 'boolean',
         'price' => 'decimal:2',
     ];
 

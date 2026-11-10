@@ -2,185 +2,262 @@
 
 namespace App\Services;
 
+use App\Models\Admin\VPS;
 use phpseclib4\Net\SSH2;
+use RuntimeException;
 
 class SSHService
 {
     private ?SSH2 $ssh = null;
 
+    public function __construct(
+        private VPS $vps
+    ) {}
+
     /**
-     * Get the SSH connection.
-     *
-     * @return SSH2
+     * Connect to the VPS assigned to the hosting account.
      */
     private function ssh(): SSH2
     {
-
-        $this->ssh = new SSH2(env('VPS_HOST'));
-
-        if (!$this->ssh->login(
-            env('VPS_USERNAME'),
-            env('VPS_PASSWORD')
-        )) {
-            abort(500, 'SSH login failed.');
+        if ($this->ssh !== null && $this->ssh->isConnected()) {
+            return $this->ssh;
         }
 
-        return $this->ssh;
+        $ssh = new SSH2($this->vps->host, $this->vps->port);
+
+        if (!$ssh->login(
+            $this->vps->username,
+            $this->vps->password
+        )) {
+            throw new RuntimeException(
+                "SSH login failed for VPS #{$this->vps->id}."
+            );
+        }
+
+        return $this->ssh = $ssh;
     }
 
     /**
-     * Create the Linux user if the home directory does not already exist.
-     *
-     * @param int $userId
-     * @return void
+     * Execute a command and verify its exit status.
      */
-    public function createLinuxUser(int $userId): void
+    private function execute(string $command): string
     {
         $ssh = $this->ssh();
 
-        $username = "server_user{$userId}";
-        $homeDirectory = "/home/{$username}";
-
-        $directoryExists = trim(
-            $ssh->exec(
-                "if [ -d " . escapeshellarg($homeDirectory) . " ]; then echo 'exists'; fi"
-            )
-        );
-
-        if ($directoryExists === 'exists') {
-            return;
-        }
-
-        $output = $ssh->exec(
-            "sudo useradd -m -d {$homeDirectory} -s /usr/sbin/nologin {$username}"
-        );
+        $output = $ssh->exec($command);
 
         $exitStatus = $ssh->getExitStatus();
 
-        if ($exitStatus !== 0) {
-            abort(
-                500,
-                "Failed to create Linux user {$username}: {$output}"
+        if ($output === false || $exitStatus !== 0) {
+            throw new RuntimeException(
+                "SSH command failed on VPS #{$this->vps->id}. " .
+                "Exit status: " . var_export($exitStatus, true) .
+                ". Output: " . (string) $output
             );
         }
+
+        return $output;
     }
 
     /**
-     * Prepare the server user and domain directory.
+     * Generate a unique Linux username for a hosting account.
      *
-     * @param string $domainName
-     * @param int $userId
-     * @return void
+     * The ID should be user_hosting.id, not users.id.
      */
-    public function prepareWebsite(string $domainName, int $userId): void
+    private function linuxUsername(int $hostingId): string
     {
+        return "server_user{$hostingId}";
+    }
+
+    /**
+     * Validate a domain before using it in paths or commands.
+     */
+    private function validateDomain(string $domainName): string
+    {
+        $domainName = strtolower(trim($domainName));
+
+        if (
+            strlen($domainName) > 253 ||
+            !filter_var($domainName, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) ||
+            !str_contains($domainName, '.')
+        ) {
+            throw new RuntimeException('Invalid domain name.');
+        }
+
+        return $domainName;
+    }
+
+    /**
+     * Create the Linux user if it doesn't already exist.
+     */
+    public function createLinuxUser(int $hostingId): void
+    {
+        $username = $this->linuxUsername($hostingId);
+        $homeDirectory = "/home/{$username}";
+
         $ssh = $this->ssh();
 
-        $ssh->exec("sudo useradd -m -s /usr/sbin/nologin server_user" . $userId);
-
         $ssh->exec(
-            "mkdir -p /home/server_user{$userId}/domains/{$domainName}/public_html"
+            'id -u ' . escapeshellarg($username) . ' >/dev/null 2>&1'
         );
 
-        $ssh->exec(
-            "sudo chown -R server_user{$userId}:server_user{$userId} /home/server_user{$userId}"
+        if ($ssh->getExitStatus() === 0) {
+            return;
+        }
+
+        $this->execute(
+            'sudo -n useradd -m -d ' .
+            escapeshellarg($homeDirectory) .
+            ' -s /usr/sbin/nologin ' .
+            escapeshellarg($username)
         );
     }
 
     /**
-     * Configure the server after a domain is paid.
-     *
-     * @param string $domainName
-     * @param int $userId
-     * @return void
+     * Prepare the Linux user and website directory.
      */
-    public function createSSLCertificate(string $domainName, int $userId): void
-    {
-        $ssh = $this->ssh();
+    public function prepareWebsite(
+        string $domainName,
+        int $hostingId
+    ): void {
+        $domainName = $this->validateDomain($domainName);
+
+        $this->createLinuxUser($hostingId);
+
+        $username = $this->linuxUsername($hostingId);
+
+        $homeDirectory = "/home/{$username}";
+
+        $websiteDirectory =
+            "{$homeDirectory}/domains/{$domainName}/public_html";
+
+        $this->execute(
+            'sudo -n mkdir -p ' .
+            escapeshellarg($websiteDirectory)
+        );
+
+        $this->execute(
+            'sudo -n chown -R ' .
+            escapeshellarg("{$username}:{$username}") .
+            ' ' .
+            escapeshellarg($homeDirectory)
+        );
+    }
+
+    /**
+     * Configure Apache and request an SSL certificate.
+     *
+     * DNS must already point to this VPS.
+     */
+    public function createSSLCertificate(
+        string $domainName,
+        int $hostingId
+    ): void {
+        $domainName = $this->validateDomain($domainName);
+
+        $username = $this->linuxUsername($hostingId);
+
+        $documentRoot =
+            "/home/{$username}/domains/{$domainName}/public_html";
+
+        $this->prepareWebsite($domainName, $hostingId);
 
         $apacheConfig = <<<APACHE
-            <VirtualHost *:80>
-                ServerName {$domainName}
-                ServerAlias www.{$domainName}
+                <VirtualHost *:80>
+                    ServerName {$domainName}
+                    ServerAlias www.{$domainName}
 
-                DocumentRoot /home/server_user{$userId}/domains/{$domainName}/public_html
+                    DocumentRoot {$documentRoot}
 
-                <Directory /home/server_user{$userId}/domains/{$domainName}/public_html>
-                    Options Indexes FollowSymLinks
-                    AllowOverride All
-                    Require all granted
-                </Directory>
+                    <Directory {$documentRoot}>
+                        Options FollowSymLinks
+                        AllowOverride All
+                        Require all granted
+                    </Directory>
 
-                ErrorLog \${APACHE_LOG_DIR}/{$domainName}_error.log
-                CustomLog \${APACHE_LOG_DIR}/{$domainName}_access.log combined
-            </VirtualHost>
-            APACHE;
+                    ErrorLog \${APACHE_LOG_DIR}/{$domainName}_error.log
+                    CustomLog \${APACHE_LOG_DIR}/{$domainName}_access.log combined
+                </VirtualHost>
+                APACHE;
 
-        $escapedConfig = escapeshellarg($apacheConfig);
+        $configPath =
+            "/etc/apache2/sites-available/{$domainName}.conf";
 
-        $ssh->exec(
-            "echo {$escapedConfig} | sudo tee /etc/apache2/sites-available/{$domainName}.conf > /dev/null"
+        $this->execute(
+            'printf %s ' .
+            escapeshellarg($apacheConfig) .
+            ' | sudo -n tee ' .
+            escapeshellarg($configPath) .
+            ' > /dev/null'
         );
 
-        $ssh->exec(
-            "echo {$escapedConfig} | sudo tee /etc/apache2/sites-enabled/{$domainName}.conf > /dev/null"
+        $this->execute(
+            'sudo -n a2ensite ' .
+            escapeshellarg("{$domainName}.conf")
         );
 
-        $isSyntaxCorrect = trim(
-            $ssh->exec('apache2ctl configtest')
+        $this->execute('sudo -n apache2ctl configtest');
+
+        $this->execute('sudo -n systemctl reload apache2');
+
+        $this->execute(
+            'sudo -n certbot --apache ' .
+            '-d ' . escapeshellarg($domainName) . ' ' .
+            '-d ' . escapeshellarg("www.{$domainName}") . ' ' .
+            '--non-interactive ' .
+            '--agree-tos ' .
+            '--email ' . escapeshellarg('contact@lubodev.com') . ' ' .
+            '--redirect'
         );
 
-        if ($isSyntaxCorrect !== 'Syntax OK') {
-            abort(
-                500,
-                'Apache configuration syntax error: ' . $isSyntaxCorrect
-            );
-        }
+        $this->execute('sudo -n apache2ctl configtest');
 
-        $ssh->exec(
-            "sudo certbot --apache -d {$domainName} -d www.{$domainName} --non-interactive --agree-tos --email contact@lubodev.com --redirect"
-        );
-
-        $isSyntaxCorrect = trim(
-            $ssh->exec('apache2ctl configtest')
-        );
-
-        if ($isSyntaxCorrect !== 'Syntax OK') {
-            abort(
-                500,
-                'Apache configuration syntax error: ' . $isSyntaxCorrect
-            );
-        }
-
-        $ssh->exec('systemclt restart apache2.service');
+        $this->execute('sudo -n systemctl reload apache2');
     }
 
     /**
-     * Check if the domain DNS records point to the VPS.
+     * Check whether the domain and www subdomain
+     * resolve to this VPS.
      *
-     * @param string $domainName
-     * @return bool
+     * Assumes vps.host contains the public IPv4 address.
      */
     public function isDomainDnsReady(string $domainName): bool
     {
-        $ssh = $this->ssh();
+        $domainName = $this->validateDomain($domainName);
 
-        $serverIp = env('VPS_HOST');
+        $serverIp = $this->vps->host;
 
-        $domainResult = trim(
-            $ssh->exec(
-                "dig @1.1.1.1 +short {$domainName} A"
-            )
+        if (!filter_var($serverIp, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            throw new RuntimeException(
+                'VPS host must be a public IPv4 address for this DNS check.'
+            );
+        }
+
+        $domainResult = $this->execute(
+            'dig @1.1.1.1 +short ' .
+            escapeshellarg($domainName) .
+            ' A'
         );
 
-        $wwwResult = trim(
-            $ssh->exec(
-                "dig @1.1.1.1 +short www.{$domainName} A"
-            )
+        $wwwResult = $this->execute(
+            'dig @1.1.1.1 +short ' .
+            escapeshellarg("www.{$domainName}") .
+            ' A'
         );
 
-        $domainIps = preg_split('/\s+/', $domainResult);
-        $wwwIps = preg_split('/\s+/', $wwwResult);
+        $domainIps = preg_split(
+            '/\s+/',
+            trim($domainResult),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        $wwwIps = preg_split(
+            '/\s+/',
+            trim($wwwResult),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
 
         return in_array($serverIp, $domainIps, true)
             && in_array($serverIp, $wwwIps, true);
@@ -189,33 +266,66 @@ class SSHService
     /**
      * Get the file manager structure from the server.
      *
-     * @param string $rootPath
-     * @param string|null $path
-     * @return array
+     * Only relative paths inside the provided root are accepted.
      */
-    public function getFileManager(string $rootPath, ?string $path = null): array
-    {
-        $ssh = $this->ssh();
+    public function getFileManager(
+        string $rootPath,
+        ?string $path = null
+    ): array {
+        $rootPath = rtrim($rootPath, '/');
+
+        if (
+            $rootPath === '' ||
+            !str_starts_with($rootPath, '/home/')
+        ) {
+            throw new RuntimeException('Invalid file manager root.');
+        }
 
         $currentPath = $path;
         $fileContent = null;
 
-        if ($currentPath) {
-            if (in_array('..', explode('/', $currentPath), true)) {
+        $rootRealPath = trim(
+            $this->execute(
+                'realpath -e -- ' . escapeshellarg($rootPath)
+            )
+        );
+
+        if ($currentPath !== null && $currentPath !== '') {
+            if (
+                str_starts_with($currentPath, '/') ||
+                in_array('..', explode('/', $currentPath), true)
+            ) {
                 abort(403);
             }
 
             $fullPath = $rootPath . '/' . $currentPath;
 
-            $fileContent = $ssh->exec(
-                'cat ' . escapeshellarg($fullPath)
+            $resolvedPath = trim(
+                $this->execute(
+                    'realpath -e -- ' . escapeshellarg($fullPath)
+                )
+            );
+
+            if (
+                $resolvedPath !== $rootRealPath &&
+                !str_starts_with(
+                    $resolvedPath,
+                    $rootRealPath . '/'
+                )
+            ) {
+                abort(403);
+            }
+
+            $fileContent = $this->execute(
+                'cat -- ' . escapeshellarg($resolvedPath)
             );
         }
 
-        $output = $ssh->exec(
-            'find '
-                . escapeshellarg($rootPath)
-                . ' -mindepth 1 -printf "%p|%y\n"'
+        $output = $this->execute(
+            'find ' .
+            escapeshellarg($rootPath) .
+            ' -mindepth 1 -printf ' .
+            escapeshellarg("%p|%y\n")
         );
 
         $lines = array_filter(
@@ -225,10 +335,16 @@ class SSHService
         $flatItems = [];
 
         foreach ($lines as $line) {
-            [$itemPath, $type] = explode('|', $line, 2);
+            $parts = explode('|', $line, 2);
+
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            [$itemPath, $type] = $parts;
 
             $relativePath = ltrim(
-                str_replace($rootPath, '', $itemPath),
+                substr($itemPath, strlen($rootPath)),
                 '/'
             );
 
@@ -240,7 +356,7 @@ class SSHService
                 'relative_path' => $relativePath,
                 'type' => $isDirectory ? 'directory' : 'file',
                 'is_open' => $isDirectory
-                    && $currentPath
+                    && $currentPath !== null
                     && str_starts_with(
                         $currentPath,
                         $relativePath . '/'
@@ -250,7 +366,10 @@ class SSHService
             ];
         }
 
-        $buildTree = function ($parentPath) use (&$buildTree, $flatItems) {
+        $buildTree = function ($parentPath) use (
+            &$buildTree,
+            $flatItems
+        ) {
             $items = [];
 
             foreach ($flatItems as $item) {
